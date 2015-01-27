@@ -1,5 +1,7 @@
 apply plugin: 'war'
 
+war.archiveName = 'users'
+
 sourceCompatibility = 1.8
 version = '1.0'
 
