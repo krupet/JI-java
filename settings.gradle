@@ -2,3 +2,5 @@ rootProject.name = 'JI-java'
 
 include 'user-manager'
 
+include 'entity'
+
