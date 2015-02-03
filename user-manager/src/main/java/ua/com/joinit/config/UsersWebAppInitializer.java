@@ -7,7 +7,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
+import javax.servlet.ServletRegistration.*;
 
 /**
  * Created by krupet on 28.01.2015.
@@ -15,25 +15,13 @@ import javax.servlet.ServletRegistration;
 public class UsersWebAppInitializer implements WebApplicationInitializer {
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
-//        // Create the 'root' Spring application context
-//        AnnotationConfigWebApplicationContext rootContext =
-//                new AnnotationConfigWebApplicationContext();
-//        rootContext.register(UsersJavaAppConfig.class);
-//
-//        // Manage the lifecycle of the root application context
-//        servletContext.addListener(new ContextLoaderListener(rootContext));
+        AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
+        ctx.register(UsersJavaAppConfig.class);
 
-        // Create the dispatcher servlet's Spring application context
-        AnnotationConfigWebApplicationContext dispatcherContext =
-                new AnnotationConfigWebApplicationContext();
-        dispatcherContext.register(UsersJavaAppConfig.class);
+        ctx.setServletContext(servletContext);
 
-        servletContext.addListener(new ContextLoaderListener(dispatcherContext));
-
-        // Register and map the dispatcher servlet
-        ServletRegistration.Dynamic dispatcher =
-                servletContext.addServlet("dispatcher", new DispatcherServlet(dispatcherContext));
-        dispatcher.setLoadOnStartup(1);
-        dispatcher.addMapping("/");
+        Dynamic servlet = servletContext.addServlet("dispatcher", new DispatcherServlet(ctx));
+        servlet.addMapping("/");
+        servlet.setLoadOnStartup(1);
     }
 }

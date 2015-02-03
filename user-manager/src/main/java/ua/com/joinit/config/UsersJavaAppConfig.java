@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import ua.com.joinit.service.UserService;
+import ua.com.joinit.service.impl.UserServiceImpl;
 
 /**
  * Created by krupet on 28.01.2015.
@@ -14,7 +16,10 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @EnableWebMvc
 @ComponentScan("ua.com.joinit.*")
 public class UsersJavaAppConfig {
-
+    @Bean
+    public UserService userService() {
+        return new UserServiceImpl();
+    }
 
     @Bean
     public ViewResolver configureViewResolver() {

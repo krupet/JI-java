@@ -1,6 +1,6 @@
 apply plugin: 'war'
 
-war.archiveName = 'users'
+war.archiveName = 'users.war'
 
 sourceCompatibility = 1.8
 version = '1.0'
