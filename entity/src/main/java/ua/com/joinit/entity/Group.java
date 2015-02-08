@@ -7,34 +7,30 @@ import java.util.Set;
 /**
  * Created by krupet on 03.02.2015.
  */
+@Entity
+@Table(name = "Group")
 public class Group {
     @Id
+    @Column(name = "Id")
     @GeneratedValue
     public Long id;
 
+    @Column(name = "GroupName")
     public String name;
+
+    @Column(name = "Description")
     public String description;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    public Set<User> members;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    public Set<Event> events;
+//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    public Set<User> members;
+//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    public Set<Event> events;
 
     public Group() {
     }
 
     public Group(String name) {
         this.name = name;
-    }
-
-    public void addUserToGroup(User user){
-        if(members == null) members = new HashSet<User>();
-        members.add(user);
-    }
-
-    public void addEvent(Event event){
-        if(events == null) events = new HashSet<Event>();
-        events.add(event);
     }
 
     public Long getId() {
@@ -59,13 +55,5 @@ public class Group {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Set<User> getMembers() {
-        return members;
-    }
-
-    public Set<Event> getEvents() {
-        return events;
     }
 }
