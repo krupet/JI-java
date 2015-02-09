@@ -8,13 +8,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import ua.com.joinit.service.UserService;
 
+import javax.annotation.Resource;
+
 /**
  * Created by krupet on 03.02.15.
  */
 @Controller
 @RequestMapping("/")
 public class UserController {
-    @Autowired
+//    @Autowired
+    @Resource(name = "userService")
     private UserService userService;
 
     @RequestMapping(method = RequestMethod.GET)

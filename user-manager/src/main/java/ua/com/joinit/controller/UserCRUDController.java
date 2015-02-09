@@ -1,4 +1,4 @@
-package ua.com.joinit.config;
+package ua.com.joinit.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.joinit.entity.User;
 import ua.com.joinit.service.UserCRUDService;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -19,7 +20,8 @@ import java.util.List;
 @RequestMapping("/")
 public class UserCRUDController {
 
-    @Autowired
+//    @Autowired
+    @Resource(name = "userCRUDService")
     private UserCRUDService userCRUDService;
 
     @RequestMapping(value = "users", method = RequestMethod.GET)
