@@ -18,7 +18,7 @@ import ua.com.joinit.service.impl.UserServiceImpl;
 @Configuration
 @EnableWebMvc
 @ComponentScan("ua.com.joinit")
-@ImportResource({"classpath:hibernate-config.xml"})
+@ImportResource({"classpath:app-config.xml"})
 public class UsersJavaAppConfig {
     @Bean
     public UserService userService() {
