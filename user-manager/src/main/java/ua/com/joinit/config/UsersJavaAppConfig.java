@@ -7,9 +7,7 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import ua.com.joinit.service.UserCRUDService;
 import ua.com.joinit.service.UserService;
-import ua.com.joinit.service.impl.UserCRUDServiceImpl;
 import ua.com.joinit.service.impl.UserServiceImpl;
 
 /**
@@ -23,11 +21,6 @@ public class UsersJavaAppConfig {
     @Bean
     public UserService userService() {
         return new UserServiceImpl();
-    }
-
-    @Bean
-    public UserCRUDService userCRUDService() {
-        return new UserCRUDServiceImpl();
     }
 
     @Bean

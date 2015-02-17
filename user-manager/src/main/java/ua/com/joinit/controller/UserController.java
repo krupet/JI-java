@@ -16,8 +16,8 @@ import javax.annotation.Resource;
 @Controller
 @RequestMapping("/")
 public class UserController {
-//    @Autowired
-    @Resource(name = "userService")
+    @Autowired
+//    @Resource(name = "userService")
     private UserService userService;
 
     @RequestMapping(method = RequestMethod.GET)
