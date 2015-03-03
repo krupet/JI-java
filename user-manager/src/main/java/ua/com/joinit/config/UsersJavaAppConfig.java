@@ -8,7 +8,11 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import ua.com.joinit.service.UserService;
+import ua.com.joinit.service.UserTestService;
 import ua.com.joinit.service.impl.UserServiceImpl;
+import ua.com.joinit.service.impl.UserTestServiceImpl;
+import ua.com.joinit.service.mock.UserMockDAO;
+import ua.com.joinit.service.mock.UserMockDAOImpl;
 
 /**
  * Created by krupet on 28.01.2015.
@@ -19,8 +23,18 @@ import ua.com.joinit.service.impl.UserServiceImpl;
 @ImportResource({"classpath:app-config.xml"})
 public class UsersJavaAppConfig {
     @Bean
+    public UserTestService userTestService() {
+        return new UserTestServiceImpl();
+    }
+
+    @Bean
     public UserService userService() {
         return new UserServiceImpl();
+    }
+
+    @Bean
+    public UserMockDAO userMockDAO() {
+        return new UserMockDAOImpl();
     }
 
     @Bean
