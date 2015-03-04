@@ -16,4 +16,9 @@ public class UserServiceImpl implements UserService {
     public User postUser(User user) {
         return userMockDAO.postUser(user);
     }
+
+    @Override
+    public User updateUser(Long id) {
+        return userMockDAO.updateUser(id);
+    }
 }

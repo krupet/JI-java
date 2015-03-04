@@ -8,10 +8,11 @@ import ua.com.joinit.entity.User;
 public class UserMockDAOImpl implements UserMockDAO {
     @Override
     public User postUser(User user) {
-//        User user1 = new User();
-//        user1.setId(1l);
-//        return user1;
+        return  null;
+    }
 
-        return  new User();
+    @Override
+    public User updateUser(Long id) {
+        return null;
     }
 }

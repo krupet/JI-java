@@ -8,4 +8,6 @@ import ua.com.joinit.entity.User;
 public interface UserService {
 
     User postUser(User user);
+
+    User updateUser(Long id);
 }

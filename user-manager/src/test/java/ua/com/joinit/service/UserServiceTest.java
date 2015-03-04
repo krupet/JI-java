@@ -31,7 +31,7 @@ public class UserServiceTest extends BaseAppTest {
 
     @Before
     public void setup() {
-        MockitoAnnotations.initMocks(this); // this is why!
+        MockitoAnnotations.initMocks(this); // this is why! just forget to add this(
     }
 
     @Test
@@ -41,6 +41,7 @@ public class UserServiceTest extends BaseAppTest {
 //        UserMockDAO userMockDAO = Mockito.mock(UserMockDAOImpl.class); // (1)
         when(userMockDAO.postUser(user)).thenReturn(new User());
         User postedUser = userService.postUser(user);
+        verify(userMockDAO,times(1)).postUser(user);
         assertNotNull(postedUser);
     }
 
@@ -55,6 +56,24 @@ public class UserServiceTest extends BaseAppTest {
         when(userMockDAO.postUser(user)).thenReturn(mockedUser);
 
         User postedUser = userService.postUser(user);
+        verify(userMockDAO, times(1)).postUser(user);
         assertEquals(mockedUser.getId(), postedUser.getId());
+    }
+
+    @Test
+    public  void putUserByIdAndExpectedIsOk() {
+        User putUser = new User("name1", "nickName1");
+        putUser.setId(1l);
+
+        User mockedUser = new User("name2", "nickName2");
+        mockedUser.setId(2l);
+        Long id = 1l;
+        when(userMockDAO.updateUser(id)).thenReturn(mockedUser);
+        User updatedUser = userService.updateUser(id);
+        verify(userMockDAO, times(1)).updateUser(id);
+
+        assertEquals("name2", updatedUser.getName());
+        assertEquals("nickName2", updatedUser.getNickName());
+        assertEquals(2l, (long) updatedUser.getId());
     }
 }
