@@ -5,13 +5,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import ua.com.joinit.BaseAppTest;
+import ua.com.joinit.DAO.UserDAO;
 import ua.com.joinit.entity.User;
-import ua.com.joinit.service.mock.UserMockDAO;
-import ua.com.joinit.service.mock.UserMockDAOImpl;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -22,7 +20,7 @@ import static org.mockito.Mockito.*;
 public class UserServiceTest extends BaseAppTest {
     @Autowired
     @Mock
-    private UserMockDAO userMockDAO; // why this is not working instead of (1)
+    private UserDAO userMockDAO; // why this is not working instead of (1)
 
 
     @Autowired
@@ -61,6 +59,17 @@ public class UserServiceTest extends BaseAppTest {
     }
 
     @Test
+    public  void update_existing_user_and_expected_is_not_null() {
+        Long id = 1l;
+        User mockedUser = new User();
+        when(userMockDAO.updateUser(id)).thenReturn(mockedUser);
+        User updatedUser = userService.updateUser(id);
+        verify(userMockDAO,times(1)).updateUser(id);
+
+        assertNotNull(updatedUser);
+    }
+
+    @Test
     public  void putUserByIdAndExpectedIsOk() {
         User putUser = new User("name1", "nickName1");
         putUser.setId(1l);
@@ -75,5 +84,55 @@ public class UserServiceTest extends BaseAppTest {
         assertEquals("name2", updatedUser.getName());
         assertEquals("nickName2", updatedUser.getNickName());
         assertEquals(2l, (long) updatedUser.getId());
+    }
+
+    @Test
+    public void get_existing_user_and_expected_is_ok() {
+        User retrievedUser = new User();
+        Long id = 1l;
+        when(userMockDAO.getUser(id)).thenReturn(retrievedUser);
+        User retrieved = userService.getUser(id);
+        verify(userMockDAO,times(1)).getUser(id);
+
+        assertNotNull(retrieved);
+    }
+
+    @Test
+    public void get_existing_user_and_expected_is_equality() {
+        User mockedUser = new User("mock", "mock");
+        Long id = 2l;
+        mockedUser.setId(id);
+        when(userMockDAO.getUser(id)).thenReturn(mockedUser);
+        User retrievedUser = userService.getUser(id);
+        verify(userMockDAO, times(1)).getUser(id);
+
+        assertEquals(2l, (long) retrievedUser.getId());
+        assertEquals("mock", retrievedUser.getName());
+        assertEquals("mock", retrievedUser.getNickName());
+    }
+
+    @Test
+    public void delete_user_and_expected_is_ok() {
+        User mockUser = new User();
+        Long id = 2l;
+        when(userMockDAO.deleteUser(id)).thenReturn(mockUser);
+        User deletedUSer = userService.deleteUser(id);
+        verify(userMockDAO, times(1)).deleteUser(id);
+
+        assertNotNull(deletedUSer);
+    }
+
+    @Test
+    public void delete_existing_user_and_expected_is_equality() {
+        User mockUser =new User("mock", "mock");
+        Long id = 2l;
+        mockUser.setId(id);
+        when(userMockDAO.deleteUser(id)).thenReturn(mockUser);
+        User deletedUser = userService.deleteUser(id);
+        verify(userMockDAO, times(1)).deleteUser(id);
+
+        assertEquals(2l, (long) deletedUser.getId());
+        assertEquals("mock", deletedUser.getName());
+        assertEquals("mock", deletedUser.getNickName());
     }
 }

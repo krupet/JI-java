@@ -7,9 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import ua.com.joinit.service.UserService;
-import ua.com.joinit.service.UserTestService;
-
-import javax.annotation.Resource;
 
 /**
  * Created by krupet on 03.02.15.
@@ -18,10 +15,10 @@ import javax.annotation.Resource;
 @RequestMapping("/")
 public class UserController {
     @Autowired
-    private UserTestService userTestService;
+    private UserService userService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> getMessageFromUser(){
-        return new ResponseEntity<>(userTestService.getMessage(), HttpStatus.OK);
+        return new ResponseEntity<>("hi", HttpStatus.OK);
     }
 }

@@ -7,6 +7,8 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import ua.com.joinit.DAO.UserDAO;
+import ua.com.joinit.mock.UserMockDAOImpl;
 import ua.com.joinit.service.UserService;
 import ua.com.joinit.service.impl.UserServiceImpl;
 
@@ -16,12 +18,17 @@ import ua.com.joinit.service.impl.UserServiceImpl;
 @Configuration
 @EnableWebMvc
 @ComponentScan("ua.com.joinit")
-@ImportResource({"classpath:app-config.xml"})
-public class UsersJavaAppConfig {
+@ImportResource({"classpath:app-test-config.xml"})
+public class UsersJavaAppTestConfig {
 
     @Bean
     public UserService userService() {
         return new UserServiceImpl();
+    }
+
+    @Bean
+    public UserDAO userMockDAO() {
+        return new UserMockDAOImpl();
     }
 
     @Bean

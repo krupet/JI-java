@@ -10,4 +10,8 @@ public interface UserService {
     User postUser(User user);
 
     User updateUser(Long id);
+
+    User getUser(Long id);
+
+    User deleteUser(Long id);
 }
