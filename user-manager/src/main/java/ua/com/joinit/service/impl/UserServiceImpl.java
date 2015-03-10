@@ -10,25 +10,25 @@ import ua.com.joinit.service.UserService;
  */
 public class UserServiceImpl implements UserService {
     @Autowired
-    private UserDAO userMockDAO;
+    private UserDAO userDAO;
 
     @Override
     public User postUser(User user) {
-        return userMockDAO.postUser(user);
+        return userDAO.postUser(user);
     }
 
     @Override
     public User updateUser(Long id) {
-        return userMockDAO.updateUser(id);
+        return userDAO.updateUser(id);
     }
 
     @Override
     public User getUser(Long id) {
-        return userMockDAO.getUser(id);
+        return userDAO.getUser(id);
     }
 
     @Override
     public User deleteUser(Long id) {
-        return userMockDAO.deleteUser(id);
+        return userDAO.deleteUser(id);
     }
 }

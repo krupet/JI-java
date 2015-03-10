@@ -16,7 +16,7 @@ import ua.com.joinit.DAO.impl.UserDAOImpl;
 public class UserDAOJavaAppConfig {
 
     @Bean
-    public UserDAO userMockDAO() {
+    public UserDAO userDAO() {
         return new UserDAOImpl();
     }
 }

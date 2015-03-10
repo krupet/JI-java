@@ -1,11 +1,13 @@
 package ua.com.joinit.controller;
 
+import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import ua.com.joinit.BaseAppTest;
@@ -16,6 +18,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -62,7 +65,7 @@ public class ControllerTests extends BaseAppTest {
 
     @Test
     public void get_user_by_id_and_expected_is_valid_user() throws Exception {
-        Long id = 12345l;
+        Long id = 1234567l;
         User mockUser = new User("mock", "mock");
         mockUser.setId(id);
         when(userService.getUser(id)).thenReturn(mockUser);
@@ -72,5 +75,25 @@ public class ControllerTests extends BaseAppTest {
                 .andDo(print());
 
         verify(userService, times(1)).getUser(id);
+    }
+
+    @Test
+    public void post_user_and_expected_is_ok() throws Exception {
+        mockMvc.perform(post("/"))
+                .andExpect(status().is(200));
+    }
+
+    @Test
+    public void post_user_and_expected_is_json() throws Exception {
+        User mockUser = new User("mock", "mock");
+        mockUser.setId(12345l);
+        Gson gson = new Gson();
+        String json = gson.toJson(mockUser);
+
+        when(userService.postUser(mockUser)).thenReturn(mockUser);
+
+        mockMvc.perform(post("/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)).andExpect(status().is(200));
     }
 }
