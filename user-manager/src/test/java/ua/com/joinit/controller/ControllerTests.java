@@ -4,17 +4,23 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import ua.com.joinit.BaseAppTest;
+import ua.com.joinit.entity.User;
 import ua.com.joinit.service.UserService;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 /**
@@ -27,18 +33,19 @@ public class ControllerTests extends BaseAppTest {
     @Autowired
     protected WebApplicationContext wac;
 
-//    @Autowired
-//    @Mock
-//    private UserService userService;
-//
-//    @Autowired
-//    @InjectMocks
-//    private UserController userController;
+    @Autowired
+    @Mock
+    private UserService userService;
+
+    @Autowired
+    @InjectMocks
+    private UserController userController;
 
     @Before
     public void setup() {
-        this.mockMvc = webAppContextSetup(this.wac).build();
-
+        MockitoAnnotations.initMocks(this);
+        this.mockMvc = standaloneSetup(userController).build();
+//        this.mockMvc = webAppContextSetup(this.wac).build();
     }
 
     @Test
@@ -55,9 +62,15 @@ public class ControllerTests extends BaseAppTest {
 
     @Test
     public void get_user_by_id_and_expected_is_valid_user() throws Exception {
-        String id = "12345";
-        mockMvc.perform(get("/" + id))
+        Long id = 12345l;
+        User mockUser = new User("mock", "mock");
+        mockUser.setId(id);
+        when(userService.getUser(id)).thenReturn(mockUser);
+
+        mockMvc.perform(get("/" + id.toString()))
                 .andExpect(status().is(200))
                 .andDo(print());
+
+        verify(userService, times(1)).getUser(id);
     }
 }

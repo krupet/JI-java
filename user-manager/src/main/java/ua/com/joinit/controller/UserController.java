@@ -27,10 +27,9 @@ public class UserController {
         return new ResponseEntity<>("hi", HttpStatus.OK);
     }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "{id}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<String> getUserById(@PathVariable("id") Long id) {
-        User user = new User("mock", "mock");
-        user.setId(id);
+        User user = userService.getUser(id);
         Gson gson = new Gson();
         return  new ResponseEntity<>(gson.toJson(user), HttpStatus.OK);
     }
