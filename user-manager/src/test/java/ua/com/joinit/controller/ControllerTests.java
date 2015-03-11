@@ -16,6 +16,7 @@ import ua.com.joinit.BaseAppTest;
 import ua.com.joinit.entity.User;
 import ua.com.joinit.service.UserService;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -88,17 +89,16 @@ public class ControllerTests extends BaseAppTest {
     @Test
     public void post_user_and_expected_is_json() throws Exception {
         User mockUser = new User("mock", "mock");
-        mockUser.setId(12345l);
+        mockUser.setId(12345678l);
         Gson gson = new Gson();
-        String json = gson.toJson(mockUser);
+        String mockUserJson = gson.toJson(mockUser);
 
-        when(userService.postUser(new User())).thenReturn(mockUser);
+        when(userService.postUser(any(User.class))).thenReturn(mockUser);
 
-//        mockMvc.perform(post("/")
-//                .accept(MediaType.APPLICATION_JSON)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(json))
-//                .andExpect(status().is(200))
-//                .andDo(print());
+        mockMvc.perform(post("/")
+                .content(mockUserJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(201))
+                .andDo(print());
     }
 }

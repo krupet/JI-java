@@ -42,6 +42,6 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity<User> postUser(@RequestBody User user) {
         User postedUser = userService.postUser(user);
-        return new ResponseEntity<>(postedUser, HttpStatus.OK);
+        return new ResponseEntity<>(postedUser, HttpStatus.CREATED);
     }
 }
