@@ -101,4 +101,25 @@ public class ControllerTests extends BaseAppTest {
                 .andExpect(status().is(201))
                 .andDo(print());
     }
+
+    @Test
+    public void post_user_and_expected_is_valid_json() throws Exception {
+        String name = "mockName";
+        String nickName = "mockNickName";
+        User mockUser = new User(name, nickName);
+        mockUser.setId(12345678l);
+        User postedUser = new User();
+        Gson gson = new Gson();
+        String mockUserJson = gson.toJson(postedUser);
+
+        when(userService.postUser(any(User.class))).thenReturn(mockUser);
+
+        mockMvc.perform(post("/")
+                .content(mockUserJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(201))
+                .andExpect(content().json("{\"id\":12345678,\"name\":\"mockName\",\"nickName\":\"mockNickName\"}"))
+//                .andExpect(content().json("{\"userName\":\"testUserDetails\",\"firstName\":\"xxx\",\"lastName\":\"xxx\",\"password\":\"xxx\"}"))
+                .andDo(print());
+    }
 }
