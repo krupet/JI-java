@@ -17,11 +17,11 @@ import ua.com.joinit.entity.User;
 import ua.com.joinit.service.UserService;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -72,10 +72,13 @@ public class ControllerTests extends BaseAppTest {
         User mockUser = new User("mock", "mock");
         mockUser.setId(id);
         when(userService.getUser(id)).thenReturn(mockUser);
+        Gson gson = new Gson();
+        String expectedJsonUser = gson.toJson(mockUser);
 
         mockMvc.perform(get("/" + id.toString()))
                 .andExpect(status().is(200))
-                .andDo(print());
+                .andExpect(content().json(expectedJsonUser));
+//                .andDo(print());
 
         verify(userService, times(1)).getUser(id);
     }
@@ -121,5 +124,88 @@ public class ControllerTests extends BaseAppTest {
                 .andExpect(content().json("{\"id\":12345678,\"name\":\"mockName\",\"nickName\":\"mockNickName\"}"))
 //                .andExpect(content().json("{\"userName\":\"testUserDetails\",\"firstName\":\"xxx\",\"lastName\":\"xxx\",\"password\":\"xxx\"}"))
                 .andDo(print());
+    }
+
+    @Test
+    public void put_user_and_expected_is_ok() throws Exception {
+        String name = "mockName";
+        String nickName = "mockNickName";
+        Long id = 1234567L;
+        User putUser = new User(name, nickName);
+        putUser.setId(id);
+
+        Gson gson = new Gson();
+        String putJsonUser = gson.toJson(putUser);
+
+        mockMvc.perform(put("/" + id.toString())
+                .content(putJsonUser)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().is(200));
+    }
+
+    /*
+    This exception may occur if matchers are combined with raw values:
+    //incorrect:
+    someMethod(anyObject(), "raw String");
+    When using matchers, all arguments have to be provided by matchers.
+    For example:
+    //correct:
+    someMethod(anyObject(), eq("String by matcher"));
+
+    For more info see javadoc for Matchers class.
+
+    see when(...) clause
+     */
+    @Test
+    public void put_user_and_expekted_is_valid_json_user() throws Exception {
+        String name = "mockName";
+        String nickName = "mockNickName";
+        Long id = 1234567L;
+        User putUser = new User(name, nickName);
+        putUser.setId(id);
+
+        Gson gson = new Gson();
+        String putJsonUser = gson.toJson(putUser);
+
+        User updatedUser = new User("updatedName", "updatedNickName");
+        updatedUser.setId(id);
+        when(userService.updateUser(eq(id), any(User.class))).thenReturn(updatedUser);
+
+        mockMvc.perform(put("/" + id.toString())
+                .content(putJsonUser)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().is(200));
+
+        verify(userService, times(1)).updateUser(eq(id), any(User.class));
+    }
+
+    @Test
+    public void delete_user_and_expected_is_ok() throws Exception {
+        Long id = 123L;
+
+        mockMvc.perform(delete("/{id}", id.toString()))
+                .andDo(print())
+                .andExpect(status().is(200));
+    }
+
+    @Test
+    public void delete_user_and_expected_is_valid_user_json() throws Exception {
+        Long id = 123L;
+        User mockUser = new User("mockName", "mockNickName");
+        mockUser.setId(id);
+
+        Gson gson = new Gson();
+        String deletedJsonUser = gson.toJson(mockUser);
+
+        when(userService.deleteUser(eq(id))).thenReturn(mockUser);
+
+        mockMvc.perform(delete("/{id}", id.toString()))
+                .andDo(print())
+                .andExpect(status().is(200))
+                .andExpect(content().json(deletedJsonUser));
+
+        verify(userService, times(1)).deleteUser(eq(id));
     }
 }

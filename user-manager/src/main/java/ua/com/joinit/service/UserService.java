@@ -9,7 +9,7 @@ public interface UserService {
 
     User postUser(User user);
 
-    User updateUser(Long id);
+    User updateUser(Long id, User user);
 
     User getUser(Long id);
 

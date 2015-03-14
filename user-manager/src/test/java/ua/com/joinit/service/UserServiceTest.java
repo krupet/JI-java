@@ -62,9 +62,10 @@ public class UserServiceTest extends BaseAppTest {
     public  void update_existing_user_and_expected_is_not_null() {
         Long id = 1l;
         User mockedUser = new User();
-        when(userMockDAO.updateUser(id)).thenReturn(mockedUser);
-        User updatedUser = userService.updateUser(id);
-        verify(userMockDAO,times(1)).updateUser(id);
+        User updUser = new User();
+        when(userMockDAO.updateUser(id, any(User.class))).thenReturn(mockedUser);
+        User updatedUser = userService.updateUser(id, updUser);
+        verify(userMockDAO,times(1)).updateUser(id, any(User.class));
 
         assertNotNull(updatedUser);
     }
@@ -77,9 +78,10 @@ public class UserServiceTest extends BaseAppTest {
         User mockedUser = new User("name2", "nickName2");
         mockedUser.setId(2l);
         Long id = 1l;
-        when(userMockDAO.updateUser(id)).thenReturn(mockedUser);
-        User updatedUser = userService.updateUser(id);
-        verify(userMockDAO, times(1)).updateUser(id);
+        User updUser = new User();
+        when(userMockDAO.updateUser(id, any(User.class))).thenReturn(mockedUser);
+        User updatedUser = userService.updateUser(id, updUser);
+        verify(userMockDAO, times(1)).updateUser(id, any(User.class));
 
         assertEquals("name2", updatedUser.getName());
         assertEquals("nickName2", updatedUser.getNickName());

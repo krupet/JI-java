@@ -13,7 +13,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User updateUser(Long id) {
+    public User updateUser(Long id, User user) {
         return null;
     }
 

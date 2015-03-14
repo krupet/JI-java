@@ -27,7 +27,7 @@ public class UserController {
     @RequestMapping(value = "{id}", method = RequestMethod.GET, produces = "application/json")
 //    public ResponseEntity<String> getUserById(@PathVariable("id") Long id) {
     public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
-        User user = userService.getUser(id);
+        User requestedUser = userService.getUser(id);
 
 //        following code was used for much older version of this controller...
 //        you`ll ask why?
@@ -36,12 +36,24 @@ public class UserController {
 //        Gson gson = new Gson();
 //        return  new ResponseEntity<>(gson.toJson(user), HttpStatus.OK);
 
-        return  new ResponseEntity<>(user, HttpStatus.OK);
+        return  new ResponseEntity<>(requestedUser, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity<User> postUser(@RequestBody User user) {
         User postedUser = userService.postUser(user);
         return new ResponseEntity<>(postedUser, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "{id}", method = RequestMethod.PUT, produces = "application/json")
+    public ResponseEntity<User> putUser(@PathVariable Long id, @RequestBody User user) {
+        User updatedUser = userService.updateUser(id, user);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE, produces = "application/json")
+    public ResponseEntity<User> deleteUser(@PathVariable Long id) {
+        User deletedUser = userService.deleteUser(id);
+        return new ResponseEntity<>(deletedUser, HttpStatus.OK);
     }
 }
