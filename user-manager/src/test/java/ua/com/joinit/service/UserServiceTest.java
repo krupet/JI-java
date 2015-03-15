@@ -63,9 +63,9 @@ public class UserServiceTest extends BaseAppTest {
         Long id = 1l;
         User mockedUser = new User();
         User updUser = new User();
-        when(userMockDAO.updateUser(id, any(User.class))).thenReturn(mockedUser);
+        when(userMockDAO.updateUser(eq(id), any(User.class))).thenReturn(mockedUser);
         User updatedUser = userService.updateUser(id, updUser);
-        verify(userMockDAO,times(1)).updateUser(id, any(User.class));
+        verify(userMockDAO,times(1)).updateUser(eq(id), any(User.class));
 
         assertNotNull(updatedUser);
     }
@@ -79,9 +79,9 @@ public class UserServiceTest extends BaseAppTest {
         mockedUser.setId(2l);
         Long id = 1l;
         User updUser = new User();
-        when(userMockDAO.updateUser(id, any(User.class))).thenReturn(mockedUser);
+        when(userMockDAO.updateUser(eq(id), any(User.class))).thenReturn(mockedUser);
         User updatedUser = userService.updateUser(id, updUser);
-        verify(userMockDAO, times(1)).updateUser(id, any(User.class));
+        verify(userMockDAO, times(1)).updateUser(eq(id), any(User.class));
 
         assertEquals("name2", updatedUser.getName());
         assertEquals("nickName2", updatedUser.getNickName());

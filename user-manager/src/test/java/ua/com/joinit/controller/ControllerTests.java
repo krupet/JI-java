@@ -85,8 +85,11 @@ public class ControllerTests extends BaseAppTest {
 
     @Test
     public void post_user_and_expected_is_ok() throws Exception {
-        mockMvc.perform(post("/"))
-                .andExpect(status().is(200));
+        User postUser = new User();
+        Gson gson = new Gson();
+        String content = gson.toJson(postUser);
+        mockMvc.perform(post("/").content(content).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(201));
     }
 
     @Test
