@@ -208,4 +208,20 @@ public class ControllerTests extends BaseAppTest {
 
         verify(userService, times(1)).deleteUser(eq(id));
     }
+
+    @Test
+    public void internal_server_exception_message_expected_and_status_501() throws Exception {
+        Long id = 123L;
+        String errMessage = "some unknown internal server error";
+        when(userService.getUser(eq(id))).thenThrow(new RuntimeException(errMessage));
+//        when(userService.getUser(eq(id))).thenThrow(new Exception(errMessage));
+//        org.mockito.exceptions.base.MockitoException:
+//        Checked exception is invalid for this method!
+//                Invalid: java.lang.Exception: some unknown internal server error
+        mockMvc.perform(get("/{id}", id.toString()))
+                .andDo(print())
+                .andExpect(content().json("{\"reason\":\"" + errMessage + "\"}"))
+                .andExpect(status().is(500));
+        verify(userService, times(1)).getUser(eq(id));
+    }
 }

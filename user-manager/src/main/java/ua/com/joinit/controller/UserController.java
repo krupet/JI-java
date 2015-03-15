@@ -56,4 +56,10 @@ public class UserController {
         User deletedUser = userService.deleteUser(id);
         return new ResponseEntity<>(deletedUser, HttpStatus.OK);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleUserControllerException(Exception ex) {
+        String excInfo = ex.getMessage();
+        return new ResponseEntity<>("{\"reason\":\"" + excInfo + "\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
