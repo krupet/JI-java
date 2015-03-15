@@ -4,3 +4,5 @@ include 'user-manager'
 
 include 'entity'
 
+include 'dao'
+
