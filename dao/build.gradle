@@ -16,7 +16,6 @@ dependencies {
     compile 'org.springframework:spring-orm:4.1.4.RELEASE'
     compile 'org.springframework:spring-context:4.1.4.RELEASE'
 
-    compile 'javax.servlet:javax.servlet-api:3.1.0' // TODO: get rid off it!!
 
     testCompile 'org.mockito:mockito-all:1.9.5'
     testCompile group: 'junit', name: 'junit', version: '4.11'
@@ -30,8 +29,16 @@ dependencies {
     compile 'org.javassist:javassist:3.15.0-GA'
     compile 'org.jboss.logging:jboss-logging:3.1.0.GA'
     compile 'org.jboss.spec.javax.transaction:jboss-transaction-api_1.1_spec:1.0.1.Final'
-//    compile 'commons-dbcp:commons-dbcp:1.2.2'
     compile 'org.apache.commons:commons-dbcp2:2.0.1'
-
     compile 'mysql:mysql-connector-java:5.1.6'
+
+//    compile 'commons-dbcp:commons-dbcp:1.2.2' //old version
+    /*
+    I need too try this:
+    <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-dbcp</artifactId>
+            <version>7.0.52</version>
+    </dependency>
+  */
 }

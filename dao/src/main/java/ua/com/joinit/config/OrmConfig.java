@@ -32,14 +32,10 @@ public class OrmConfig {
     @Bean
     public DataSource restDataSource() {
         BasicDataSource dataSource = new BasicDataSource();
-//        dataSource.setDriverClassName(env.getProperty("jdbc.driverClassName"));
-//        dataSource.setUrl(env.getProperty("jdbc.url"));
-//        dataSource.setUsername("jdbc.username");
-//        dataSource.setPassword("jdbc.password");
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/usersdb");
-        dataSource.setUsername("root");
-        dataSource.setPassword("QaZ592456018");
+        dataSource.setDriverClassName(env.getProperty("jdbc.driverClassName"));
+        dataSource.setUrl(env.getProperty("jdbc.url"));
+        dataSource.setUsername(env.getProperty("jdbc.username"));
+        dataSource.setPassword(env.getProperty("jdbc.password"));
 
         return dataSource;
     }
@@ -57,7 +53,7 @@ public class OrmConfig {
     @Bean
     @Autowired
     public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
-        HibernateTransactionManager hibernateTransactionManager =new HibernateTransactionManager();
+        HibernateTransactionManager hibernateTransactionManager = new HibernateTransactionManager();
         hibernateTransactionManager.setSessionFactory(sessionFactory);
 
         return hibernateTransactionManager;

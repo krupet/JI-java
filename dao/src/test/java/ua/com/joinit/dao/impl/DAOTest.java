@@ -22,23 +22,24 @@ public class DAOTest extends BaseAppTest{
 
     @Test
     public void post_new_user() {
-//        User expectedUser = new User("username", "usernickname");
-//        Long id = (Long) sessionFactory.getCurrentSession().save(expectedUser);
-//        System.out.println(id);
 
-        Session session = sessionFactory.openSession();
-        Transaction tx = null;
-        Long employeeID = null;
-        try{
-            tx = session.beginTransaction();
-            User user = new User("name", "nickname");
-            employeeID = (Long) session.save(user);
-            tx.commit();
-        }catch (HibernateException e) {
-            if (tx!=null) tx.rollback();
-            e.printStackTrace();
-        }finally {
-            session.close();
-        }
+        User user = new User("name", "nickname");
+
+        userDAO.postUser(user);
+
+//        Session session = sessionFactory.openSession();
+//        Transaction tx = null;
+//        Long employeeID = null;
+//        try{
+//            tx = session.beginTransaction();
+//            User user = new User("name", "nickname");
+//            employeeID = (Long) session.save(user);
+//            tx.commit();
+//        }catch (HibernateException e) {
+//            if (tx!=null) tx.rollback();
+//            e.printStackTrace();
+//        }finally {
+//            session.close();
+//        }
     }
 }
