@@ -33,7 +33,9 @@ public class UserDAOImpl implements UserDAO{
     @Transactional
     public User getUser(Long id) {
         Session session = sessionFactory.getCurrentSession();
-        return (User) session.load(User.class, id);
+//        Session session = sessionFactory.openSession();
+        return (User) session.get(User.class, id);
+//        return (User) session.load(User.class, id);
     }
 
     @Override

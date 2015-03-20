@@ -25,7 +25,14 @@ public class DAOTest extends BaseAppTest{
 
         User user = new User("name", "nickname");
 
-        userDAO.postUser(user);
+//        userDAO.postUser(user);
+
+//        userDAO.deleteUser(1L);
+
+        User obtainedUser = userDAO.getUser(2L);
+        String name = obtainedUser.getName();
+
+        System.out.println(name);
 
 //        Session session = sessionFactory.openSession();
 //        Transaction tx = null;
