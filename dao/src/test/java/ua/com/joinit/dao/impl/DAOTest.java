@@ -49,4 +49,12 @@ public class DAOTest extends BaseAppTest{
 //            session.close();
 //        }
     }
+
+    @Test
+    public void test_delete_user_by_user_id() {
+        Long id = 5L;
+
+        User deletedUser = userDAO.deleteUser(id);
+        System.out.println(deletedUser.getNickName());
+    }
 }

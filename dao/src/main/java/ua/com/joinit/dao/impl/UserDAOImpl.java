@@ -42,7 +42,7 @@ public class UserDAOImpl implements UserDAO{
     @Transactional
     public User deleteUser(Long id) {
         Session session = sessionFactory.getCurrentSession();
-        User user = (User) session.load(User.class, id);
+        User user = (User) session.get(User.class, id);
         if(user != null) {
             session.delete(user);
             return user; // TODO: need to be well tested!!!!!!!!!!!

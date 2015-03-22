@@ -28,7 +28,7 @@ dependencies {
     compile 'org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final'
     compile 'org.javassist:javassist:3.15.0-GA'
     compile 'org.jboss.logging:jboss-logging:3.1.0.GA'
-    compile 'org.jboss.spec.javax.transaction:jboss-transaction-api_1.1_spec:1.0.1.Final'
+//    compile 'org.jboss.spec.javax.transaction:jboss-transaction-api_1.1_spec:1.0.1.Final'
     compile 'org.apache.commons:commons-dbcp2:2.0.1'
     compile 'mysql:mysql-connector-java:5.1.6'
 
