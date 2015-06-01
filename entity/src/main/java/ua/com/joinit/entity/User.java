@@ -9,64 +9,71 @@ import java.io.Serializable;
  * Created by krupet on 03.02.2015.
  */
 @Entity
-@Table(name = "User")
+//@Table(name = "User") //Linux
+@Table(name = "user") // Win
 public class User implements Serializable{
 
     @Id
-    @Column(name = "Id", unique = true)
-    @GeneratedValue
-//    @GeneratedValue(generator = "system-uuid")
-//    @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    public Long id;
+    @Column(name = "user_id", unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-    @Column(name = "Name")
-    public String name;
+    @Column(name = "user_f_name")
+    private String firstName;
 
-    @Column(name = "NickName")
-    public String nickName;
+    @Column(name = "user_l_name")
+    private String lastName;
 
-//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    public Set<Event> userEvents;
-//
-//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    public Set<Group> userGroups;
+    @Column(name = "user_nick")
+    private String nickName;
+
+    @Column(name = "user_email")
+    private String email;
+
+    @Column(name = "user_phone_number")
+    private long phone;
+
+    @Column(name = "user_desc")
+    private String aboutYourself;
 
     public User() {
     }
 
-    public User(Long id) {
-        this.id = id;
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", email='" + email + '\'' +
+                ", phone=" + phone +
+                ", aboutYourself='" + aboutYourself + '\'' +
+                '}';
     }
 
-    public User(String name) {
-        this.name = name;
-    }
-
-    public User(String name, String nickName) {
-        this.name = name;
-        this.nickName = nickName;
-    }
-
-    public User(Long id, String name, String nickName) {
-        this.id = id;
-        this.name = name;
-        this.nickName = nickName;
-    }
-
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getNickName() {
@@ -77,13 +84,28 @@ public class User implements Serializable{
         this.nickName = nickName;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", nickName='" + nickName + '\'' +
-                '}';
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public long getPhone() {
+        return phone;
+    }
+
+    public void setPhone(long phone) {
+        this.phone = phone;
+    }
+
+    public String getAboutYourself() {
+        return aboutYourself;
+    }
+
+    public void setAboutYourself(String aboutYourself) {
+        this.aboutYourself = aboutYourself;
     }
 
     @Override
@@ -93,8 +115,13 @@ public class User implements Serializable{
 
         User user = (User) o;
 
-        if (id != null ? !id.equals(user.id) : user.id != null) return false;
-        if (name != null ? !name.equals(user.name) : user.name != null) return false;
+        if (id != user.id) return false;
+        if (phone != user.phone) return false;
+        if (aboutYourself != null ? !aboutYourself.equals(user.aboutYourself) : user.aboutYourself != null)
+            return false;
+        if (email != null ? !email.equals(user.email) : user.email != null) return false;
+        if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
         if (nickName != null ? !nickName.equals(user.nickName) : user.nickName != null) return false;
 
         return true;
@@ -102,9 +129,13 @@ public class User implements Serializable{
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (nickName != null ? nickName.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (int) (phone ^ (phone >>> 32));
+        result = 31 * result + (aboutYourself != null ? aboutYourself.hashCode() : 0);
         return result;
     }
 }
