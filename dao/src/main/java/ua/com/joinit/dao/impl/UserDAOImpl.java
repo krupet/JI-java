@@ -34,7 +34,9 @@ public class UserDAOImpl implements UserDAO{
     @Override
     public User updateUser(Long id, User user) {
         Session session = sessionFactory.openSession();
+//        session.saveOrUpdate(user);
         session.saveOrUpdate(user);
+        session.flush(); //TODO: set autoflush!! see: http://stackoverflow.com/questions/3313458/hibernate-is-not-updating-record-wicket
         User dbUser = (User) session.load(User.class, id);
         session.close();
 
