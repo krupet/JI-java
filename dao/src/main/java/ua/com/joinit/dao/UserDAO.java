@@ -2,6 +2,8 @@ package ua.com.joinit.dao;
 
 import ua.com.joinit.entity.User;
 
+import java.util.List;
+
 /**
  * Created by krupet on 15.03.2015.
  */
@@ -12,5 +14,5 @@ public interface UserDAO {
 
     User getUser(Long id);
 
-    User deleteUser(Long id);
+    List<User> getAllUsers();
 }

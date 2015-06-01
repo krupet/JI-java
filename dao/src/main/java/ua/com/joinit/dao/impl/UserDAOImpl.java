@@ -1,11 +1,15 @@
 package ua.com.joinit.dao.impl;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.joinit.dao.UserDAO;
 import ua.com.joinit.entity.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by krupet on 15.03.2015.
@@ -16,38 +20,45 @@ public class UserDAOImpl implements UserDAO{
     private SessionFactory sessionFactory;
 
     @Override
-    @Transactional
     public User postUser(User user) {
-        Session session = sessionFactory.getCurrentSession();
+        Session session = sessionFactory.openSession();
+
         Long userId = (Long) session.save(user);
-        return (User) session.load(User.class, userId);
+        //TODO: as i understand user loads from hibernate lvl1 cache
+        User dbUser = (User) session.load(User.class, userId);
+        session.close();
+
+        return dbUser;
     }
 
     @Override
-    @Transactional
     public User updateUser(Long id, User user) {
-        return null;
+        Session session = sessionFactory.openSession();
+        session.saveOrUpdate(user);
+        User dbUser = (User) session.load(User.class, id);
+        session.close();
+
+        return dbUser;
     }
 
     @Override
-    @Transactional
     public User getUser(Long id) {
-        Session session = sessionFactory.getCurrentSession();
-//        Session session = sessionFactory.openSession();
-        return (User) session.get(User.class, id);
-//        return (User) session.load(User.class, id);
+        Session session = sessionFactory.openSession();
+        //No lvl1 cache - lazy initialization exception with load().
+        User dbUser = (User) session.get(User.class, id);
+        session.close();
+        return dbUser;
     }
 
     @Override
-    @Transactional
-    public User deleteUser(Long id) {
-        Session session = sessionFactory.getCurrentSession();
-        User user = (User) session.get(User.class, id);
-        if(user != null) {
-            session.delete(user);
-            return user; // TODO: need to be well tested!!!!!!!!!!!
-        } else {
-            return null;
-        }
+    @SuppressWarnings(value = "unchecked") // List dbUsers casting...
+    public List<User> getAllUsers() {
+        Session session = sessionFactory.openSession();
+
+        Criteria criteria = session.createCriteria(User.class);
+        List dbUsers = criteria.list();
+
+        session.close();
+        return dbUsers;
     }
 }

@@ -1,4 +1,4 @@
-CREATE TABLE `User` (
+CREATE TABLE `Users` (
   `user_id` BIGINT unsigned NOT NULL AUTO_INCREMENT,
   `user_f_name` varchar(20) NOT NULL,
   `user_l_name` varchar(20) NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE `User` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `UsersGroup` (
+CREATE TABLE `UsersGroups` (
   `group_id` BIGINT unsigned NOT NULL AUTO_INCREMENT,
   `group_name` varchar(20) NOT NULL,
   `group_desc` varchar(20) NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE `UsersGroup` (
   PRIMARY KEY (`group_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `Event` (
+CREATE TABLE `Events` (
   `event_id` BIGINT unsigned NOT NULL AUTO_INCREMENT,
   `event_name` varchar(20) NOT NULL,
   `event_desc` varchar(300) NOT NULL,
@@ -30,6 +30,6 @@ CREATE TABLE `Group_Users` (
   `group_id` BIGINT unsigned NOT NULL,
   `user_id` BIGINT unsigned NOT NULL,
   PRIMARY KEY (`group_id`,`user_id`),
-  CONSTRAINT `fk_group_id` FOREIGN KEY (`group_id`) REFERENCES `Group` (`group_id`),
-  CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `User` (`user_id`)
+  CONSTRAINT `fk_group_id` FOREIGN KEY (`group_id`) REFERENCES `UsersGroups` (`group_id`),
+  CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `Users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -8,8 +8,8 @@ import java.util.Set;
  * Created by krupet on 03.02.2015.
  */
 @Entity
-//@Table(name = "UsersGroup") //Linux
-@Table(name = "usersgroup") //Win
+//@Table(name = "UsersGroups") //Linux
+@Table(name = "usersgroups") //Win
 public class Group {
     @Id
     @Column(name = "group_id")

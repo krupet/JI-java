@@ -9,8 +9,8 @@ import java.io.Serializable;
  * Created by krupet on 03.02.2015.
  */
 @Entity
-//@Table(name = "User") //Linux
-@Table(name = "user") // Win
+//@Table(name = "Users") //Linux
+@Table(name = "users") // Win
 public class User implements Serializable{
 
     @Id

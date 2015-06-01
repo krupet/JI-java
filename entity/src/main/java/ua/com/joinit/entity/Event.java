@@ -6,8 +6,8 @@ import javax.persistence.*;
  * Created by krupet on 03.02.2015.
  */
 @Entity
-//@Table(name = "Event") // Linux
-@Table(name = "event") // Win problems with encoding in mysql
+//@Table(name = "Events") // Linux
+@Table(name = "events") // Win problems with encoding in mysql
 public class Event {
     @Id
     @Column(name = "event_id")
