@@ -22,9 +22,6 @@ public class DAOTest extends BaseAppTest{
     @Autowired
     private UserDAO userDAO;
 
-    @Autowired
-    private SessionFactory sessionFactory;
-
     @Test
     public void post_new_user() {
         User testUser = new User();

@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import ua.com.joinit.entity.User;
 import ua.com.joinit.service.UserService;
 
+import java.util.List;
+
 /**
  * Created by krupet on 03.02.15.
  */
@@ -51,10 +53,10 @@ public class UserController {
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.DELETE, produces = "application/json")
-    public ResponseEntity<User> deleteUser(@PathVariable Long id) {
-        User deletedUser = userService.deleteUser(id);
-        return new ResponseEntity<>(deletedUser, HttpStatus.OK);
+    @RequestMapping(value = "users", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<List<User>> deleteUser() {
+        List<User> usersList = userService.getAllUsers();
+        return new ResponseEntity<>(usersList, HttpStatus.OK);
     }
 
     @ExceptionHandler(Exception.class)

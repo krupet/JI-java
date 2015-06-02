@@ -8,7 +8,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import ua.com.joinit.DAO.UserDAO;
+import ua.com.joinit.dao.UserDAO;
 import ua.com.joinit.mock.UserMockDAOImpl;
 import ua.com.joinit.service.UserService;
 import ua.com.joinit.service.impl.UserServiceImpl;

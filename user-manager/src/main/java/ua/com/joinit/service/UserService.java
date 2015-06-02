@@ -2,6 +2,8 @@ package ua.com.joinit.service;
 
 import ua.com.joinit.entity.User;
 
+import java.util.List;
+
 /**
  * Created by krupet on 28.01.2015.
  */
@@ -13,5 +15,5 @@ public interface UserService {
 
     User getUser(Long id);
 
-    User deleteUser(Long id);
+    List<User> getAllUsers();
 }

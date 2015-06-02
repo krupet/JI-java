@@ -1,7 +1,9 @@
 package ua.com.joinit.mock;
 
-import ua.com.joinit.DAO.UserDAO;
+import ua.com.joinit.dao.UserDAO;
 import ua.com.joinit.entity.User;
+
+import java.util.List;
 
 /**
  * Created by krupet on 3/3/15.
@@ -23,7 +25,7 @@ public class UserMockDAOImpl implements UserDAO {
     }
 
     @Override
-    public User deleteUser(Long id) {
+    public List<User> getAllUsers() {
         return null;
     }
 }

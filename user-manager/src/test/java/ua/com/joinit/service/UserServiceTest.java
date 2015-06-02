@@ -1,6 +1,5 @@
 package ua.com.joinit.service;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -8,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import ua.com.joinit.BaseAppTest;
-import ua.com.joinit.DAO.UserDAO;
+import ua.com.joinit.dao.UserDAO;
 import ua.com.joinit.entity.User;
 
 import static org.junit.Assert.*;
@@ -45,22 +44,34 @@ public class UserServiceTest extends BaseAppTest {
 
     @Test
     public void postNewUserAndExpectedHisIdIsNotNull() {
-        User user = new User("name", "nickName");
-        assertEquals(null, user.getId());
+        User user = new User();
+        user.setFirstName("test_first_name");
+        user.setLastName("test_last_name");
+        user.setNickName("test_nick_name");
+        user.setEmail("testEmail@gmail.com");
+        user.setPhone(1234567890L);
+        user.setAboutYourself("test_about_yourself");
+        assertEquals(0L, user.getId());
 
-//        UserMockDAO userMockDAO = Mockito.mock(UserMockDAOImpl.class);
-        User mockedUser = new User("name", "nickName");
-        mockedUser.setId(1l);
+        User mockedUser = new User();
+        mockedUser.setFirstName("test_first_name");
+        mockedUser.setLastName("test_last_name");
+        mockedUser.setNickName("test_nick_name");
+        mockedUser.setEmail("testEmail@gmail.com");
+        mockedUser.setPhone(1234567890L);
+        mockedUser.setAboutYourself("test_about_yourself");
+        mockedUser.setId(1L);
+
         when(userMockDAO.postUser(user)).thenReturn(mockedUser);
 
         User postedUser = userService.postUser(user);
         verify(userMockDAO, times(1)).postUser(user);
         assertEquals(mockedUser.getId(), postedUser.getId());
     }
-
+//
     @Test
     public  void update_existing_user_and_expected_is_not_null() {
-        Long id = 1l;
+        Long id = 1L;
         User mockedUser = new User();
         User updUser = new User();
         when(userMockDAO.updateUser(eq(id), any(User.class))).thenReturn(mockedUser);
@@ -69,29 +80,34 @@ public class UserServiceTest extends BaseAppTest {
 
         assertNotNull(updatedUser);
     }
-
+//
     @Test
     public  void putUserByIdAndExpectedIsOk() {
-        User putUser = new User("name1", "nickName1");
-        putUser.setId(1l);
 
-        User mockedUser = new User("name2", "nickName2");
-        mockedUser.setId(2l);
-        Long id = 1l;
+        User mockedUser = new User();
+        mockedUser.setFirstName("test_first_name");
+        mockedUser.setLastName("test_last_name");
+        mockedUser.setNickName("test_nick_name");
+        mockedUser.setEmail("testEmail@gmail.com");
+        mockedUser.setPhone(1234567890L);
+        mockedUser.setAboutYourself("test_about_yourself");
+        mockedUser.setId(2L);
+
+        Long id = 1L;
         User updUser = new User();
         when(userMockDAO.updateUser(eq(id), any(User.class))).thenReturn(mockedUser);
         User updatedUser = userService.updateUser(id, updUser);
         verify(userMockDAO, times(1)).updateUser(eq(id), any(User.class));
 
-        assertEquals("name2", updatedUser.getName());
-        assertEquals("nickName2", updatedUser.getNickName());
-        assertEquals(2l, (long) updatedUser.getId());
+        assertEquals("test_first_name", updatedUser.getFirstName());
+        assertEquals("test_nick_name", updatedUser.getNickName());
+        assertEquals(2L, updatedUser.getId());
     }
 
     @Test
     public void get_existing_user_and_expected_is_ok() {
         User retrievedUser = new User();
-        Long id = 1l;
+        Long id = 1L;
         when(userMockDAO.getUser(id)).thenReturn(retrievedUser);
         User retrieved = userService.getUser(id);
         verify(userMockDAO,times(1)).getUser(id);
@@ -101,40 +117,22 @@ public class UserServiceTest extends BaseAppTest {
 
     @Test
     public void get_existing_user_and_expected_is_equality() {
-        User mockedUser = new User("mock", "mock");
-        Long id = 2l;
+        User mockedUser = new User();
+        mockedUser.setFirstName("test_first_name");
+        mockedUser.setLastName("test_last_name");
+        mockedUser.setNickName("test_nick_name");
+        mockedUser.setEmail("testEmail@gmail.com");
+        mockedUser.setPhone(1234567890L);
+        mockedUser.setAboutYourself("test_about_yourself");
+        Long id = 2L;
         mockedUser.setId(id);
+
         when(userMockDAO.getUser(id)).thenReturn(mockedUser);
         User retrievedUser = userService.getUser(id);
         verify(userMockDAO, times(1)).getUser(id);
 
-        assertEquals(2l, (long) retrievedUser.getId());
-        assertEquals("mock", retrievedUser.getName());
-        assertEquals("mock", retrievedUser.getNickName());
-    }
-
-    @Test
-    public void delete_user_and_expected_is_ok() {
-        User mockUser = new User();
-        Long id = 2l;
-        when(userMockDAO.deleteUser(id)).thenReturn(mockUser);
-        User deletedUSer = userService.deleteUser(id);
-        verify(userMockDAO, times(1)).deleteUser(id);
-
-        assertNotNull(deletedUSer);
-    }
-
-    @Test
-    public void delete_existing_user_and_expected_is_equality() {
-        User mockUser =new User("mock", "mock");
-        Long id = 2l;
-        mockUser.setId(id);
-        when(userMockDAO.deleteUser(id)).thenReturn(mockUser);
-        User deletedUser = userService.deleteUser(id);
-        verify(userMockDAO, times(1)).deleteUser(id);
-
-        assertEquals(2l, (long) deletedUser.getId());
-        assertEquals("mock", deletedUser.getName());
-        assertEquals("mock", deletedUser.getNickName());
+        assertEquals(2L, retrievedUser.getId());
+        assertEquals("test_first_name", retrievedUser.getFirstName());
+        assertEquals("test_nick_name", retrievedUser.getNickName());
     }
 }

@@ -1,9 +1,11 @@
 package ua.com.joinit.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import ua.com.joinit.DAO.UserDAO;
+import ua.com.joinit.dao.UserDAO;
 import ua.com.joinit.entity.User;
 import ua.com.joinit.service.UserService;
+
+import java.util.List;
 
 /**
  * Created by krupet on 3/3/15.
@@ -28,7 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User deleteUser(Long id) {
-        return userDAO.deleteUser(id);
+    public List<User> getAllUsers() {
+        return userDAO.getAllUsers();
     }
 }

@@ -4,8 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import ua.com.joinit.DAO.UserDAO;
-import ua.com.joinit.DAO.impl.UserDAOImpl;
+import ua.com.joinit.dao.UserDAO;
+import ua.com.joinit.dao.impl.UserDAOImpl;
 
 /**
  * Created by krupet on 3/5/15.
