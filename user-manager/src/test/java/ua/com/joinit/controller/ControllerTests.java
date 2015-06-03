@@ -16,6 +16,9 @@ import ua.com.joinit.BaseAppTest;
 import ua.com.joinit.entity.User;
 import ua.com.joinit.service.UserService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
@@ -238,5 +241,47 @@ public class ControllerTests extends BaseAppTest {
                 .andExpect(content().json("{\"reason\":\"" + errMessage + "\"}"))
                 .andExpect(status().is(500));
         verify(userService, times(1)).getUser(eq(id));
+    }
+
+    @Test
+    public void get_all_users_test_and_expected_is_ok() throws Exception {
+
+        mockMvc.perform(get("/users"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void get_all_users_list_and_expected_valid_users_list() throws Exception {
+
+        List<User> mockedUsersList = new ArrayList<>();
+
+        Long id = 1234567L;
+        User mockUser = new User();
+        mockUser.setFirstName("test_first_name");
+        mockUser.setLastName("test_last_name");
+        mockUser.setNickName("test_nick_name");
+        mockUser.setEmail("testEmail@gmail.com");
+        mockUser.setPhone(1234567890L);
+        mockUser.setAboutYourself("test_about_yourself");
+        mockUser.setId(id);
+
+        mockedUsersList.add(mockUser);
+        mockedUsersList.add(mockUser);
+        mockedUsersList.add(mockUser);
+
+        Gson gson = new Gson();
+        String expectedList = gson.toJson(mockedUsersList);
+
+        when(userService.getAllUsers()).thenReturn(mockedUsersList);
+        mockMvc.perform(get("/users"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(content().json(expectedList)) //TODO: exception because of array comparing
+//                .andExpect(content().string(expectedList))
+                .andExpect(content().string(expectedList));
+//                .andDo(print());
+
+        verify(userService, times(1)).getAllUsers();
+
     }
 }

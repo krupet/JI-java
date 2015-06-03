@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "users", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<List<User>> deleteUser() {
+    public ResponseEntity<List<User>> getAllUsers() {
         List<User> usersList = userService.getAllUsers();
         return new ResponseEntity<>(usersList, HttpStatus.OK);
     }

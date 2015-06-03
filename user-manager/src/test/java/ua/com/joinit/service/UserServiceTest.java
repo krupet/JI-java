@@ -10,6 +10,9 @@ import ua.com.joinit.BaseAppTest;
 import ua.com.joinit.dao.UserDAO;
 import ua.com.joinit.entity.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -134,5 +137,30 @@ public class UserServiceTest extends BaseAppTest {
         assertEquals(2L, retrievedUser.getId());
         assertEquals("test_first_name", retrievedUser.getFirstName());
         assertEquals("test_nick_name", retrievedUser.getNickName());
+    }
+
+    @Test
+    public void get_list_of_all_users_and_expected_not_empty_list() {
+
+        User mockedUser = new User();
+        mockedUser.setFirstName("test_first_name");
+        mockedUser.setLastName("test_last_name");
+        mockedUser.setNickName("test_nick_name");
+        mockedUser.setEmail("testEmail@gmail.com");
+        mockedUser.setPhone(1234567890L);
+        mockedUser.setAboutYourself("test_about_yourself");
+        Long id = 1L;
+        mockedUser.setId(id);
+
+        List<User> mockUsersList = new ArrayList<>();
+        mockUsersList.add(mockedUser);
+
+        when(userMockDAO.getAllUsers()).thenReturn(mockUsersList);
+        List<User> users = userService.getAllUsers();
+        verify(userMockDAO, times(1)).getAllUsers();
+
+        assertNotNull(users);
+        assertNotNull(users.get(0));
+        assertEquals(1L, users.get(0).getId());
     }
 }

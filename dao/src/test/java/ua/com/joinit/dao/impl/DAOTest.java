@@ -64,7 +64,7 @@ public class DAOTest extends BaseAppTest{
 
         User dbUser = userDAO.updateUser(testUser.getId(), testUser);
         assertNotNull(dbUser);
-        System.out.println(testUser.toString());
+//        System.out.println(testUser.toString());
 //        assertNotNull(dbUser.getId());
 //        assertEquals(dbUser.getId(), testUser.getId());
     }
