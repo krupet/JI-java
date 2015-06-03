@@ -31,6 +31,10 @@ public class UserController {
     public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
         User requestedUser = userService.getUser(id);
 
+        if (requestedUser == null) {
+            throw new RuntimeException("There is no user with such id");
+        }
+
 //        following code was used for much older version of this controller...
 //        you`ll ask why?
 //        because I don`t implement object mapper (json) in my context class.
