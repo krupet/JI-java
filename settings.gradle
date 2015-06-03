@@ -1,8 +1,7 @@
 rootProject.name = 'JI-java'
 
 include 'user-manager'
-
 include 'entity'
-
 include 'dao'
+include 'embedded-jetty-test'
 
