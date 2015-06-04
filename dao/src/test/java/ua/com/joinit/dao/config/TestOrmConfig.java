@@ -1,4 +1,4 @@
-package ua.com.joinit.config;
+package ua.com.joinit.dao.config;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.hibernate.SessionFactory;
@@ -26,7 +26,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @PropertySource({"classpath:persistence.properties"})
 @ComponentScan("ua.com.joinit")
-public class OrmConfig {
+public class TestOrmConfig {
 
     @Autowired
     private Environment env;

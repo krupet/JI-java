@@ -12,13 +12,12 @@ import ua.com.joinit.entity.User;
 
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * Created by krupet on 15.03.2015.
  */
-public class DAOTest extends BaseAppTest{
+public class UserDAOTest extends BaseAppTest{
     @Autowired
     private UserDAO userDAO;
 
