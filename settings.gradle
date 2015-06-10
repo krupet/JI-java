@@ -4,4 +4,6 @@ include 'user-manager'
 include 'entity'
 include 'dao'
 include 'embedded-jetty-test'
+include 'group-manager'
+include 'event-manager'
 
