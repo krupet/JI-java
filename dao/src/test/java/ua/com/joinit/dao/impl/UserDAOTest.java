@@ -10,6 +10,7 @@ import ua.com.joinit.dao.BaseAppTest;
 import ua.com.joinit.dao.UserDAO;
 import ua.com.joinit.entity.User;
 
+import java.io.*;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -37,7 +38,7 @@ public class UserDAOTest extends BaseAppTest{
 
     @Test
     public void get_user_by_id() {
-        long id = 2L;
+        long id = 1L;
         User dbUser = userDAO.getUser(id);
         assertNotNull(dbUser);
     }

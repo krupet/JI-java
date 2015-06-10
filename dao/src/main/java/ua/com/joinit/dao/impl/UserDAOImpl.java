@@ -45,9 +45,10 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public User getUser(Long id) {
+
         Session session = sessionFactory.openSession();
-        //No lvl1 cache - lazy initialization exception with load().
         User dbUser = (User) session.get(User.class, id);
+
         session.close();
         return dbUser;
     }

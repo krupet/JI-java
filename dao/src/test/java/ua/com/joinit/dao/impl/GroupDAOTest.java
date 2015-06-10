@@ -106,4 +106,71 @@ public class GroupDAOTest extends BaseAppTest {
         Group dbGroup = groupDAO.deleteGroup(group);
         assertNull(dbGroup);
     }
+
+    @Test
+    public void add_user_to_group_by_id_and_ok_expected() {
+        Long groupID = 2L;
+        Long userID = 1L;
+        Group dbGroup = groupDAO.addUserToGroupById(groupID, userID);
+        assertNotNull(dbGroup);
+    }
+
+    @Test
+    public void delete_user_from_group_and_expected_is_ok() {
+        Long groupID = 1L;
+        Long userID = 3L;
+        Group dbGroup = groupDAO.deleteUserFromGroupById(groupID, userID);
+        assertNull(dbGroup);
+    }
+
+    @Test
+    public void delete_not_existing_user_from_group_and_expected_is_null() {
+
+        Long groupID = 1L;
+        Long userID = 3333L;
+
+        Group dbGroup = groupDAO.deleteUserFromGroupById(groupID, userID);
+        assertNull(dbGroup);
+    }
+
+    @Test
+    public void add_event_in_group_and_expected_is_ok() {
+
+        Long groupID = 2L;
+        Long eventID = 3L;
+
+        Group dbGroup = groupDAO.addEvent(groupID, eventID);
+        assertNotNull(dbGroup);
+    }
+
+    @Test
+    public void add_not_existing_event_in_nonexistent_group_and_expected_is_null() {
+
+        Long groupID = 2222L;
+        Long eventID = 3333L;
+
+        Group dbGroup = groupDAO.addEvent(groupID, eventID);
+        assertNull(dbGroup);
+    }
+
+    @Test
+    public void delete_event_from_group_and_expected_is_ok() {
+
+        Long groupID = 2L;
+        Long eventID = 1L;
+
+        Group dbGroup = groupDAO.removeEvent(groupID, eventID);
+        assertNotNull(dbGroup);
+    }
+
+    @Test
+    public void delete_nonexistent_event_from_nonexistent_group_and_expected_is_null() {
+
+        Long groupID = 2222L;
+        Long eventID = 1111L;
+
+        Group dbGroup = groupDAO.removeEvent(groupID, eventID);
+        assertNull(dbGroup);
+    }
+
 }

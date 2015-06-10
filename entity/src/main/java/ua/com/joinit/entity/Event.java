@@ -1,13 +1,13 @@
 package ua.com.joinit.entity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Created by krupet on 03.02.2015.
  */
 @Entity
-//@Table(name = "Events") // Linux
-@Table(name = "events") // Win problems with encoding in mysql
+@Table(name = "events")
 public class Event {
     @Id
     @Column(name = "event_id")
@@ -26,7 +26,30 @@ public class Event {
     @Column(name = "event_creation_date")
     private long creationDate;
 
+    @ManyToMany(targetEntity = User.class, cascade = {CascadeType.ALL})
+    @JoinTable(name = "event_users",
+            joinColumns = { @JoinColumn(name = "event_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")})
+    private Set<User> users;
+
     public Event() {
+    }
+
+    // just for tests
+    public Event(String eventName, String description, long eventDate, long creationDate) {
+        this.eventName = eventName;
+        this.description = description;
+        this.eventDate = eventDate;
+        this.creationDate = creationDate;
+    }
+
+    // just for tests
+    public Event(String eventName, String description, long eventDate, long creationDate, Set<User> users) {
+        this.eventName = eventName;
+        this.description = description;
+        this.eventDate = eventDate;
+        this.creationDate = creationDate;
+        this.users = users;
     }
 
     @Override
@@ -78,6 +101,14 @@ public class Event {
 
     public void setCreationDate(long creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 
     @Override

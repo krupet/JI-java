@@ -11,8 +11,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import ua.com.joinit.dao.EventDAO;
 import ua.com.joinit.dao.GroupDAO;
 import ua.com.joinit.dao.UserDAO;
+import ua.com.joinit.dao.impl.EventDAOImpl;
 import ua.com.joinit.dao.impl.GroupDAOImpl;
 import ua.com.joinit.dao.impl.UserDAOImpl;
 
@@ -82,5 +84,10 @@ public class TestOrmConfig {
     @Bean
     public GroupDAO groupDAO() {
         return new GroupDAOImpl();
+    }
+
+    @Bean
+    public EventDAO eventDAO() {
+        return new EventDAOImpl();
     }
 }

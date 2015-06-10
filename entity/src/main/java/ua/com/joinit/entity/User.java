@@ -3,14 +3,13 @@ package ua.com.joinit.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-
+import java.util.Set;
 
 /**
  * Created by krupet on 03.02.2015.
  */
 @Entity
-//@Table(name = "Users") //Linux
-@Table(name = "users") // Win
+@Table(name = "users")
 public class User implements Serializable{
 
     @Id
@@ -36,7 +35,26 @@ public class User implements Serializable{
     @Column(name = "user_desc")
     private String aboutYourself;
 
-    public User() {
+    @ManyToMany(cascade = { CascadeType.ALL }, mappedBy = "users")
+    private Set<Event> events;
+
+    @ManyToMany(cascade = { CascadeType.ALL }, mappedBy = "users")
+    private Set<Group> groups;
+
+    public Set<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(Set<Event> events) {
+        this.events = events;
+    }
+
+    public Set<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<Group> groups) {
+        this.groups = groups;
     }
 
     @Override
@@ -49,8 +67,37 @@ public class User implements Serializable{
                 ", email='" + email + '\'' +
                 ", phone=" + phone +
                 ", aboutYourself='" + aboutYourself + '\'' +
+                ", events=" + events +
+                ", groups=" + groups +
                 '}';
     }
+
+    public User() {
+    }
+
+    // just for tests
+    public User(String firstName, String lastName, String nickName,
+                String email, long phone, String aboutYourself) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.nickName = nickName;
+        this.email = email;
+        this.phone = phone;
+        this.aboutYourself = aboutYourself;
+    }
+
+//    @Override
+//    public String toString() {
+//        return "User{" +
+//                "id=" + id +
+//                ", firstName='" + firstName + '\'' +
+//                ", lastName='" + lastName + '\'' +
+//                ", nickName='" + nickName + '\'' +
+//                ", email='" + email + '\'' +
+//                ", phone=" + phone +
+//                ", aboutYourself='" + aboutYourself + '\'' +
+//                '}';
+//    }
 
     public long getId() {
         return id;

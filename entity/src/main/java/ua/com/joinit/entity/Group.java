@@ -8,8 +8,7 @@ import java.util.Set;
  * Created by krupet on 03.02.2015.
  */
 @Entity
-//@Table(name = "GroupsOfUsers") //Linux
-@Table(name = "groupsofusers") //Win
+@Table(name = "groups_of_users")
 public class Group {
     @Id
     @Column(name = "group_id")
@@ -25,14 +24,36 @@ public class Group {
     @Column(name = "group_creation_date")
     private long creationDate;
 
-    @ManyToMany(targetEntity = User.class, cascade = {CascadeType.ALL})
-//    @JoinTable(name = "Group_Users", //Linux
-    @JoinTable(name = "group_users", //Win
+    @ManyToMany(targetEntity = User.class, cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    @JoinTable(name = "group_users",
             joinColumns = { @JoinColumn(name = "group_id")},
             inverseJoinColumns = {@JoinColumn(name = "user_id")})
     private Set<User> users;
 
+    @ManyToMany(targetEntity = Event.class, cascade = {CascadeType.ALL})
+    @JoinTable(name = "group_events",
+            joinColumns = { @JoinColumn(name = "group_id")},
+            inverseJoinColumns = {@JoinColumn(name = "event_id")})
+    private Set<Event> events;
+
     public Group() {
+    }
+
+    //just for tests
+    public Group(String name, String description, long creationDate, Set<User> users) {
+        this.name = name;
+        this.description = description;
+        this.creationDate = creationDate;
+        this.users = users;
+    }
+
+    //just for tests
+    public Group(String name, String description, long creationDate, Set<User> users, Set<Event> events) {
+        this.name = name;
+        this.description = description;
+        this.creationDate = creationDate;
+        this.users = users;
+        this.events = events;
     }
 
     @Override
@@ -83,6 +104,14 @@ public class Group {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public Set<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(Set<Event> events) {
+        this.events = events;
     }
 
     @Override
