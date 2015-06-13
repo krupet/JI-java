@@ -1,5 +1,7 @@
 package ua.com.joinit.entity;
 
+import com.fasterxml.jackson.annotation.*;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -26,7 +28,8 @@ public class Event {
     @Column(name = "event_creation_date")
     private long creationDate;
 
-    @ManyToMany(targetEntity = User.class, cascade = {CascadeType.ALL})
+    @JsonIgnore
+    @ManyToMany(targetEntity = User.class, cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinTable(name = "event_users",
             joinColumns = { @JoinColumn(name = "event_id")},
             inverseJoinColumns = {@JoinColumn(name = "user_id")})

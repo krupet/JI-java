@@ -12,6 +12,7 @@ repositories {
 dependencies {
     // Project dependencies
     compile project(":user-manager")
+    compile project(":event-manager")
     compile project(":entity")
     compile project(":dao")
 

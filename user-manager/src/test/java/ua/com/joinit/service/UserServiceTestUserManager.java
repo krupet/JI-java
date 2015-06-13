@@ -6,7 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import ua.com.joinit.BaseAppTest;
+import ua.com.joinit.UserManagerBaseAppTest;
 import ua.com.joinit.dao.UserDAO;
 import ua.com.joinit.entity.User;
 
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 /**
  * Created by krupet on 3/3/15.
  */
-public class UserServiceTest extends BaseAppTest {
+public class UserServiceTestUserManager extends UserManagerBaseAppTest {
     @Autowired
     @Mock
     private UserDAO userMockDAO; // why this is not working instead of (1)

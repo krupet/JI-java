@@ -12,5 +12,5 @@ import ua.com.joinit.config.EventsJavaAppTestConfig;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = EventsJavaAppTestConfig.class)
-public abstract class BaseAppTest {
+public abstract class EventManagerBaseAppTest {
 }

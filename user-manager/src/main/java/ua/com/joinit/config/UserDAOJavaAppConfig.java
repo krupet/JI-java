@@ -11,7 +11,6 @@ import ua.com.joinit.dao.impl.UserDAOImpl;
  * Created by krupet on 3/5/15.
  */
 @Configuration
-//@EnableWebMvc
 @ComponentScan("ua.com.joinit")
 public class UserDAOJavaAppConfig {
 

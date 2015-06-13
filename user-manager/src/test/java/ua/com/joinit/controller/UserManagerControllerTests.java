@@ -9,10 +9,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.context.WebApplicationContext;
-import ua.com.joinit.BaseAppTest;
+import ua.com.joinit.UserManagerBaseAppTest;
 import ua.com.joinit.entity.User;
 import ua.com.joinit.service.UserService;
 
@@ -28,14 +26,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 /**
  * Created by krupet on 25.02.2015.
  */
-public class ControllerTests extends BaseAppTest {
+public class UserManagerControllerTests extends UserManagerBaseAppTest {
     private MockMvc mockMvc;
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
@@ -53,8 +49,12 @@ public class ControllerTests extends BaseAppTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        this.mockMvc = standaloneSetup(userController).build();
-//        this.mockMvc = webAppContextSetup(this.wac).build();
+        /*
+            forget wtf is this and why it is here?? don`t worry and look here:
+            http://www.petrikainulainen.net/programming/spring-framework/unit-testing-of-spring-mvc-controllers-configuration/
+         */
+        this.mockMvc = standaloneSetup(userController).build(); //stand alone set up for testing only one controller
+//        this.mockMvc = webAppContextSetup(this.wac).build(); // could test all controllers in this "wac"
     }
 
     @Test

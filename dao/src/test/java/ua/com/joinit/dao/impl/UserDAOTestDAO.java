@@ -1,16 +1,11 @@
 package ua.com.joinit.dao.impl;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import ua.com.joinit.dao.BaseAppTest;
+import ua.com.joinit.dao.DAOBaseAppTest;
 import ua.com.joinit.dao.UserDAO;
 import ua.com.joinit.entity.User;
 
-import java.io.*;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -18,7 +13,7 @@ import static org.junit.Assert.*;
 /**
  * Created by krupet on 15.03.2015.
  */
-public class UserDAOTest extends BaseAppTest{
+public class UserDAOTestDAO extends DAOBaseAppTest {
     @Autowired
     private UserDAO userDAO;
 

@@ -2,7 +2,7 @@ package ua.com.joinit.dao.impl;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import ua.com.joinit.dao.BaseAppTest;
+import ua.com.joinit.dao.DAOBaseAppTest;
 import ua.com.joinit.dao.EventDAO;
 import ua.com.joinit.entity.Event;
 
@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 /**
  * Created by krupet on 08.06.2015.
  */
-public class EventDAOTest extends BaseAppTest {
+public class EventDAOTestDAO extends DAOBaseAppTest {
 
     @Autowired
     private EventDAO eventDAO;

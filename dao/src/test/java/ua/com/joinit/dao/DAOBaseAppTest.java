@@ -15,5 +15,5 @@ import ua.com.joinit.dao.config.TestOrmConfig;
 @ContextConfiguration(classes = TestOrmConfig.class)
 //@TransactionConfiguration(defaultRollback = true)
 //@Transactional
-public abstract class BaseAppTest {
+public abstract class DAOBaseAppTest {
 }

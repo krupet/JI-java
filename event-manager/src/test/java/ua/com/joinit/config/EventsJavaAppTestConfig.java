@@ -4,9 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import ua.com.joinit.dao.EventDAO;
 import ua.com.joinit.mock.EventMockDAOImpl;
 import ua.com.joinit.service.EventService;
@@ -29,15 +27,6 @@ public class EventsJavaAppTestConfig {
     @Bean
     EventDAO eventDAO() {
         return new EventMockDAOImpl();
-    }
-
-    @Bean
-    public ViewResolver configureViewResolver() {
-        InternalResourceViewResolver viewResolve = new InternalResourceViewResolver();
-        viewResolve.setPrefix("/WEB-INF/pages/");
-        viewResolve.setSuffix(".jsp");
-
-        return viewResolve;
     }
 
     @Bean

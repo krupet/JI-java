@@ -64,6 +64,7 @@ public class UserController {
     }
 
     @ExceptionHandler(Exception.class)
+    @RequestMapping(produces = "application/json")
     public ResponseEntity<String> handleUserControllerException(Exception ex) {
         String excInfo = ex.getMessage();
         return new ResponseEntity<>("{\"reason\":\"" + excInfo + "\"}", HttpStatus.INTERNAL_SERVER_ERROR);

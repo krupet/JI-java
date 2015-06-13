@@ -1,6 +1,5 @@
 package ua.com.joinit.entity;
 
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -35,10 +34,10 @@ public class User implements Serializable{
     @Column(name = "user_desc")
     private String aboutYourself;
 
-    @ManyToMany(cascade = { CascadeType.ALL }, mappedBy = "users")
+    @ManyToMany(cascade = { CascadeType.ALL }, mappedBy = "users", fetch = FetchType.LAZY)
     private Set<Event> events;
 
-    @ManyToMany(cascade = { CascadeType.ALL }, mappedBy = "users")
+    @ManyToMany(cascade = { CascadeType.ALL }, mappedBy = "users", fetch = FetchType.LAZY)
     private Set<Group> groups;
 
     public Set<Event> getEvents() {
@@ -67,8 +66,6 @@ public class User implements Serializable{
                 ", email='" + email + '\'' +
                 ", phone=" + phone +
                 ", aboutYourself='" + aboutYourself + '\'' +
-                ", events=" + events +
-                ", groups=" + groups +
                 '}';
     }
 
@@ -85,19 +82,6 @@ public class User implements Serializable{
         this.phone = phone;
         this.aboutYourself = aboutYourself;
     }
-
-//    @Override
-//    public String toString() {
-//        return "User{" +
-//                "id=" + id +
-//                ", firstName='" + firstName + '\'' +
-//                ", lastName='" + lastName + '\'' +
-//                ", nickName='" + nickName + '\'' +
-//                ", email='" + email + '\'' +
-//                ", phone=" + phone +
-//                ", aboutYourself='" + aboutYourself + '\'' +
-//                '}';
-//    }
 
     public long getId() {
         return id;
