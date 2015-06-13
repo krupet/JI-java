@@ -12,6 +12,7 @@ import ua.com.joinit.dao.DAOBaseAppTest;
 import ua.com.joinit.entity.Event;
 import ua.com.joinit.entity.User;
 
+import javax.jws.soap.SOAPBinding;
 import javax.transaction.Transaction;
 import java.util.List;
 
@@ -23,20 +24,30 @@ public class CriteriaTestDAO extends DAOBaseAppTest {
     @Autowired
     private SessionFactory sessionFactory;
 
+//    @Test
+//    public void get_event_with_users_set() {
+//        Gson gson = new Gson();
+//        Long id = 1L;
+//        Session session = sessionFactory.openSession();
+//        Event dbEvent = (Event) session.get(Event.class, id);
+//        Hibernate.initialize(dbEvent.getUsers().toString());
+//        session.close();
+//
+//        System.out.println(dbEvent.getUsers());
+////        String json = gson.toJson(dbEvent);
+//
+////        System.out.println(json);
+//    }
+
+
     @Test
-    public void get_event_with_users_set() {
-        Gson gson = new Gson();
-        Long id = 1L;
+    public void get_events_list_by_user() {
         Session session = sessionFactory.openSession();
-        Event dbEvent = (Event) session.get(Event.class, id);
-        Hibernate.initialize(dbEvent.getUsers().toString());
-        session.close();
+        Criteria criteria = session.createCriteria(Event.class);
+        criteria.createAlias("users", "e");
+        criteria.add(Restrictions.eq("e.id", 3L));
+        List events = criteria.list();
 
-        System.out.println(dbEvent.getUsers());
-//        String json = gson.toJson(dbEvent);
-
-//        System.out.println(json);
+        System.out.println(events);
     }
-
-
 }

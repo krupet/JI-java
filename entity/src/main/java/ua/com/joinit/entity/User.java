@@ -34,27 +34,25 @@ public class User implements Serializable{
     @Column(name = "user_desc")
     private String aboutYourself;
 
-    @ManyToMany(cascade = { CascadeType.ALL }, mappedBy = "users", fetch = FetchType.LAZY)
-    private Set<Event> events;
+//    private Set<Event> events;
+//
+//    private Set<Group> groups;
 
-    @ManyToMany(cascade = { CascadeType.ALL }, mappedBy = "users", fetch = FetchType.LAZY)
-    private Set<Group> groups;
-
-    public Set<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(Set<Event> events) {
-        this.events = events;
-    }
-
-    public Set<Group> getGroups() {
-        return groups;
-    }
-
-    public void setGroups(Set<Group> groups) {
-        this.groups = groups;
-    }
+//    public Set<Event> getEvents() {
+//        return events;
+//    }
+//
+//    public void setEvents(Set<Event> events) {
+//        this.events = events;
+//    }
+//
+//    public Set<Group> getGroups() {
+//        return groups;
+//    }
+//
+//    public void setGroups(Set<Group> groups) {
+//        this.groups = groups;
+//    }
 
     @Override
     public String toString() {
