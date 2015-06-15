@@ -9,6 +9,7 @@ import ua.com.joinit.entity.Event;
 import ua.com.joinit.entity.Group;
 import ua.com.joinit.entity.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -43,14 +44,19 @@ public class GroupDAOImpl implements GroupDAO {
         return dbGroup; //TODO: maybe here should use defensive copying to avoid lazy initialization exception or use DTO?
     }
 
+    /*
+        to reduce db loading this method will return list of groups without events list
+     */
     @Override
     @SuppressWarnings(value = "unchecked")
     public List<Group> getAllGroups() {
 
         Session session = sessionFactory.openSession();
         Criteria criteria = session.createCriteria(Group.class);
-        List<Group> dbGroups = criteria.list();
+        List<Group> dbGroups = (ArrayList<Group>) criteria.list();
         session.close();
+
+        for (Group group: dbGroups) group.setEvents(null);
 
         return dbGroups;
     }
@@ -81,44 +87,6 @@ public class GroupDAOImpl implements GroupDAO {
     }
 
     @Override
-    public Group addUserToGroupById(Long groupID, Long userID) {
-
-        Session session = sessionFactory.openSession();
-        User dbUser = (User) session.get(User.class, userID); // Ensuring that given user exists in db
-        Group dbGroup = (Group) session.get(Group.class, groupID); // Ensuring that given group exists in db
-
-        if (dbUser != null && dbGroup != null) {
-            Set<User> userSet = dbGroup.getUsers();
-            userSet.add(dbUser);
-        } else return null; // returning null if operation isn't successful
-
-        session.flush();
-        session.close();
-
-        return dbGroup;
-    }
-
-    @Override
-    public Group deleteUserFromGroupById(Long groupID, Long userID) {
-
-        Session session = sessionFactory.openSession();
-        User dbUser = (User) session.get(User.class, userID); // Ensuring that given user exists in db
-        Group dbGroup = (Group) session.get(Group.class, groupID); // Ensuring that given group exists in db
-
-        if (dbUser != null && dbGroup != null) {
-            Set<User> userList = dbGroup.getUsers();
-            if (userList.contains(dbUser)) {
-                userList.remove(dbUser);
-            } else return null; // TODO: replace with exception throwing with reason message
-        } else return null; // returning null if operation isn't successful
-
-        session.flush();
-        session.close();
-
-        return dbGroup;
-    }
-
-    @Override
     public Group addEvent(Long groupID, Long eventID) {
 
         Session session = sessionFactory.openSession();
@@ -127,7 +95,7 @@ public class GroupDAOImpl implements GroupDAO {
 
         if (dbEvent != null && dbGroup != null) {
             Set<Event> eventSet = dbGroup.getEvents();
-            eventSet.add(dbEvent);
+            if (!eventSet.add(dbEvent)) return null; // already present in the Set.
         } else return null;
 
         session.flush();

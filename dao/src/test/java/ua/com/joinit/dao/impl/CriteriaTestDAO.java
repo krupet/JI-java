@@ -14,6 +14,7 @@ import ua.com.joinit.entity.User;
 
 import javax.jws.soap.SOAPBinding;
 import javax.transaction.Transaction;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,4 +66,45 @@ public class CriteriaTestDAO extends DAOBaseAppTest {
 //        System.out.println(events);
 //        System.out.println(json);
 //    }
+
+    @Test
+    public void get_user_with_lists_by_id() {
+
+        Session session = sessionFactory.openSession();
+        Long id = 3L;
+        User dbUser = (User) session.get(User.class, id);
+        Hibernate.initialize(dbUser.getEvents());
+        Hibernate.initialize(dbUser.getGroups());
+        session.close();
+
+        System.out.println(dbUser);
+//        System.out.println(dbUser.getGroups());
+//        System.out.println(dbUser.getEvents());
+    }
+
+    /*
+        get list of users in event
+     */
+    @SuppressWarnings(value = "unchecked")
+    @Test
+    public void get_list_of_users_by_event_id() {
+
+        Gson gson = new Gson();
+        Session session = sessionFactory.openSession();
+        Criteria crt = session.createCriteria(User.class);
+        crt.createAlias("events", "e");
+        crt.add(Restrictions.eq("e.id", 1L));
+        ArrayList<User> users = (ArrayList<User>) crt.list();
+        session.close();
+
+        for (User user: users) {
+            user.setEvents(null);
+            user.setGroups(null);
+        }
+
+        String json = gson.toJson(users);
+        System.out.println(json);
+
+        System.out.println(users);
+    }
 }

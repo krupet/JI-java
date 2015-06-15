@@ -19,10 +19,6 @@ public interface GroupDAO {
 
     Group deleteGroup(Group group);
 
-    Group addUserToGroupById(Long groupID, Long userID);
-
-    Group deleteUserFromGroupById(Long groupID, Long userID);
-
     Group addEvent(Long groupID, Long eventID);
 
     Group removeEvent(Long groupID, Long eventID);

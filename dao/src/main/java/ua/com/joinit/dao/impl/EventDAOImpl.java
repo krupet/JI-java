@@ -64,43 +64,47 @@ public class EventDAOImpl implements EventDAO{
         return dbEvent;
     }
 
-    @Override
-    public Event addUser(Long eventID, Long userID) {
-
-        Session session = sessionFactory.openSession();
-        Event dbEvent = (Event) session.get(Event.class, eventID);
-        User dbUser = (User) session.get(User.class, userID);
-
-        if (dbEvent != null && dbUser != null) {
-            Set<User> userSet = dbEvent.getUsers();
-            if (!userSet.contains(dbUser)) { // redundant? maybe.
-                userSet.add(dbUser);
-            } else return null;
-        } else return null;
-
-        session.flush();
-        session.close();
-
-        return dbEvent;
-    }
-
-    @Override
     public Event deleteUser(Long eventID, Long userID) {
-
-        Session session = sessionFactory.openSession();
-        Event dbEvent = (Event) session.get(Event.class, eventID);
-        User dbUser = (User) session.get(User.class, userID);
-
-        if (dbEvent != null && dbUser != null) {
-            Set<User> userSet = dbEvent.getUsers();
-            if (userSet.contains(dbUser)) {
-                userSet.remove(dbUser);
-            } else return null;
-        } else return null;
-
-        session.flush();
-        session.close();
-
-        return dbEvent;
+        return null;
     }
+
+//    @Override
+//    public Event addUser(Long eventID, Long userID) {
+//
+//        Session session = sessionFactory.openSession();
+//        Event dbEvent = (Event) session.get(Event.class, eventID);
+//        User dbUser = (User) session.get(User.class, userID);
+//
+//        if (dbEvent != null && dbUser != null) {
+//            Set<User> userSet = dbEvent.getUsers();
+//            if (!userSet.contains(dbUser)) { // redundant? maybe.
+//                userSet.add(dbUser);
+//            } else return null;
+//        } else return null;
+//
+//        session.flush();
+//        session.close();
+//
+//        return dbEvent;
+//    }
+//
+//    @Override
+//    public Event deleteUser(Long eventID, Long userID) {
+//
+//        Session session = sessionFactory.openSession();
+//        Event dbEvent = (Event) session.get(Event.class, eventID);
+//        User dbUser = (User) session.get(User.class, userID);
+//
+//        if (dbEvent != null && dbUser != null) {
+//            Set<User> userSet = dbEvent.getUsers();
+//            if (userSet.contains(dbUser)) {
+//                userSet.remove(dbUser);
+//            } else return null;
+//        } else return null;
+//
+//        session.flush();
+//        session.close();
+//
+//        return dbEvent;
+//    }
 }

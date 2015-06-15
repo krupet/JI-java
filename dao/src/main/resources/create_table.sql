@@ -15,7 +15,7 @@ CREATE TABLE users (
   `user_f_name` varchar(20) NOT NULL,
   `user_l_name` varchar(20) NOT NULL,
   `user_nick` varchar(20) NOT NULL,
-  `user_email` varchar(50) NOT NULL,
+  `user_email` varchar(50) NOT NULL UNIQUE,
   `user_phone_number` int(20) unsigned,
   `user_desc` varchar(300) NOT NULL,
   PRIMARY KEY (`user_id`)
@@ -23,7 +23,7 @@ CREATE TABLE users (
 
 CREATE TABLE groups_of_users (
   `group_id` BIGINT unsigned NOT NULL AUTO_INCREMENT,
-  `group_name` varchar(50) NOT NULL,
+  `group_name` varchar(50) NOT NULL UNIQUE,
   `group_desc` varchar(300) NOT NULL,
   `group_creation_date` BIGINT unsigned NOT NULL,
   PRIMARY KEY (`group_id`)

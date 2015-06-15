@@ -13,8 +13,4 @@ public interface EventDAO {
     Event getEventById(Long id);
 
     Event deleteEvent(Event event);
-
-    Event addUser(Long eventID, Long userID);
-
-    Event deleteUser(Long eventID, Long userID);
 }

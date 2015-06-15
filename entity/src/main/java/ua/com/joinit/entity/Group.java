@@ -22,7 +22,7 @@ public class Group {
     private String description;
 
     @Column(name = "group_creation_date")
-    private long creationDate;
+    private Long creationDate;
 
     @ManyToMany(targetEntity = Event.class, cascade = {CascadeType.ALL})
     @JoinTable(name = "group_events",
@@ -84,7 +84,7 @@ public class Group {
         return creationDate;
     }
 
-    public void setCreationDate(long creationDate) {
+    public void setCreationDate(Long creationDate) {
         this.creationDate = creationDate;
     }
 

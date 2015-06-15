@@ -62,18 +62,36 @@ public class User implements Serializable{
         this.groups = groups;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", nickName='" + nickName + '\'' +
-                ", email='" + email + '\'' +
-                ", phone=" + phone +
-                ", aboutYourself='" + aboutYourself + '\'' +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "User{" +
+//                "id=" + id +
+//                ", firstName='" + firstName + '\'' +
+//                ", lastName='" + lastName + '\'' +
+//                ", nickName='" + nickName + '\'' +
+//                ", email='" + email + '\'' +
+//                ", phone=" + phone +
+//                ", aboutYourself='" + aboutYourself + '\'' +
+//                '}';
+//    }
+
+    /*
+        TODO: gains lazy initialization exceptions! (((
+     */
+//    @Override
+//    public String toString() {
+//        return "User{" +
+//                "id=" + id +
+//                ", firstName='" + firstName + '\'' +
+//                ", lastName='" + lastName + '\'' +
+//                ", nickName='" + nickName + '\'' +
+//                ", email='" + email + '\'' +
+//                ", phone=" + phone +
+//                ", aboutYourself='" + aboutYourself + '\'' +
+//                ", events=" + events +
+//                ", groups=" + groups +
+//                '}';
+//    }
 
     public User() {
     }

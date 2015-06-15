@@ -3,7 +3,9 @@ package ua.com.joinit.dao.impl;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ua.com.joinit.dao.DAOBaseAppTest;
+import ua.com.joinit.dao.EventDAO;
 import ua.com.joinit.dao.GroupDAO;
+import ua.com.joinit.entity.Event;
 import ua.com.joinit.entity.Group;
 
 import java.util.Date;
@@ -19,41 +21,76 @@ public class GroupDAOTestDAO extends DAOBaseAppTest {
     @Autowired
     private GroupDAO groupDAO;
 
-    @Test
-    public void post_group_and_expected_ok() {
+    @Autowired
+    private EventDAO eventDAO;
 
-        Group group = new Group();
-        group.setName("test_group_name");
-        group.setDescription("test_group_description");
-        group.setCreationDate(new Date().getTime());
+    @Test
+    public void post_new_group_with_unique_name_and_expected_ok() {
+
+        Long creationTime = new Date().getTime();
+        String groupName = "group_" + creationTime;
+
+        Group group = new Group(groupName, "test_group_description", creationTime);
+
         Group postedGroup = groupDAO.postGroup(group);
         assertNotNull(postedGroup.getId());
     }
 
     @Test(expected = Exception.class)
-    public void post_not_valid_group_and_exception_expected() {
+    public void post_new_group_with_non_unique_name_and_expected_ok() {
+
+        Long creationTime = new Date().getTime();
+        String groupName = "group_" + creationTime;
+
+        Group group1 = new Group(groupName, "test_group_description", creationTime);
+        Group group2 = new Group(groupName, "test_group_description", creationTime);
+
+        Group postedGroup1 = groupDAO.postGroup(group1);
+        assertNotNull(postedGroup1.getId());
+        Group postedGroup2 = groupDAO.postGroup(group2);
+    }
+
+    @Test(expected = Exception.class)
+    public void post_not_valid_group_without_some_not_null_property_and_exception_expected() {
+
         Group group = new Group();
         group.setName("test_group_name");
-//        group.setDescription("test_group_description");
+        group.setDescription(null);
         group.setCreationDate(new Date().getTime());
         Group postedGroup = groupDAO.postGroup(group);
-//        assertNull(postedGroup);
     }
 
     @Test
-    public void get_group_by_id_without_users_list_and_expected_is_ok() {
-        Long id = 2L;
+    public void get_group_by_id_and_expected_is_ok() {
+
+        Long creationTime = new Date().getTime();
+        String groupName = "group_" + creationTime;
+
+        Group group = new Group(groupName, "test_group_description", creationTime);
+        Group postedGroup = groupDAO.postGroup(group);
+        assertNotNull(postedGroup);
+
+        Long id = postedGroup.getId();
+
         Group dbGroup = groupDAO.getGroupById(id);
         assertNotNull(dbGroup);
         assertNotNull(dbGroup.getId());
         assertNotNull(dbGroup.getName());
         assertNotNull(dbGroup.getDescription());
         assertNotNull(dbGroup.getCreationDate());
-//        assertNull(dbGroup.getUsers()); //TODO: lazy initialization exception!
+    }
+
+    @Test(expected = Exception.class)
+    public void get_group_by_not_existing_id_and_exception_expected() {
+
+        Long id = 22222222L;
+
+        Group dbGroup = groupDAO.getGroupById(id);
     }
 
     @Test
     public void get_list_of_all_groups_and_expected_is_ok() {
+
         List dbGroups = groupDAO.getAllGroups();
         assertNotNull(dbGroups);
         assertFalse(dbGroups.isEmpty());
@@ -61,24 +98,30 @@ public class GroupDAOTestDAO extends DAOBaseAppTest {
 
     @Test
     public void update_group_and_expected_is_ok() {
-        Group group = new Group();
-        group.setId(2L);
-        group.setName("update_test_group_name");
-        group.setDescription("update_test_group_description");
-        group.setCreationDate(new Date().getTime());
 
-        Group dbGroup = groupDAO.updateGroup(group);
+        Long creationTime = new Date().getTime();
+        String groupName = "group_" + creationTime;
+
+        Group group = new Group(groupName, "test_group_description", creationTime);
+        Group postedGroup = groupDAO.postGroup(group);
+        assertNotNull(postedGroup);
+
+        Long id = postedGroup.getId();
+        Group updGroup = new Group("upd_" + groupName, "upd_test_group_name", creationTime);
+        updGroup.setId(id);
+
+        Group dbGroup = groupDAO.updateGroup(updGroup);
 
         assertNotNull(dbGroup);
     }
 
     @Test(expected = Exception.class)
     public void update_not_existing_group_and_exception_expected() {
-        Group group = new Group();
-        group.setId(1101L);
-        group.setName("update_test_group_name");
-        group.setDescription("update_test_group_description");
-        group.setCreationDate(new Date().getTime());
+
+        Long id = 2222222L;
+        Group group = new Group("update_test_group_name", "update_test_group_description",
+                                new Date().getTime());
+        group.setId(id);
 
         Group dbGroup = groupDAO.updateGroup(group);
         assertNull(dbGroup);
@@ -86,58 +129,51 @@ public class GroupDAOTestDAO extends DAOBaseAppTest {
 
     @Test
     public void delete_existing_group_and_expected_is_ok() {
-        Group group = new Group();
-        group.setId(3L);
-        group.setName("update_test_group_name");
-        group.setDescription("update_test_group_description");
 
-        Group dbGroup = groupDAO.deleteGroup(group);
+        Long creationTime = new Date().getTime();
+        String groupName = "group_" + creationTime;
+
+        Group group = new Group(groupName, "test_group_description", creationTime);
+        Group postedGroup = groupDAO.postGroup(group);
+        assertNotNull(postedGroup);
+
+        Long id = postedGroup.getId();
+        Group deleteGroup = new Group("del_" + groupName, "del_test_group_name", creationTime);
+        deleteGroup.setId(id);
+
+        Group dbGroup = groupDAO.deleteGroup(deleteGroup);
         assertNull(dbGroup);
     }
 
     @Test(expected = Exception.class)
     public void delete_not_existing_group_and_exception_expected() {
 
-        Group group = new Group();
-        group.setId(1111L);
-        group.setName("update_test_group_name");
-        group.setDescription("update_test_group_description");
+        Long creationTime = new Date().getTime();
+        String groupName = "group_" + creationTime;
+        Long id = 222222L;
+
+        Group group = new Group(groupName, "test_descr", creationTime);
+        group.setId(id);
 
         Group dbGroup = groupDAO.deleteGroup(group);
-        assertNull(dbGroup);
-    }
-
-    @Test
-    public void add_user_to_group_by_id_and_ok_expected() {
-        Long groupID = 2L;
-        Long userID = 1L;
-        Group dbGroup = groupDAO.addUserToGroupById(groupID, userID);
-        assertNotNull(dbGroup);
-    }
-
-    @Test
-    public void delete_user_from_group_and_expected_is_ok() {
-        Long groupID = 1L;
-        Long userID = 3L;
-        Group dbGroup = groupDAO.deleteUserFromGroupById(groupID, userID);
-        assertNull(dbGroup);
-    }
-
-    @Test
-    public void delete_not_existing_user_from_group_and_expected_is_null() {
-
-        Long groupID = 1L;
-        Long userID = 3333L;
-
-        Group dbGroup = groupDAO.deleteUserFromGroupById(groupID, userID);
-        assertNull(dbGroup);
     }
 
     @Test
     public void add_event_in_group_and_expected_is_ok() {
 
-        Long groupID = 2L;
-        Long eventID = 3L;
+        Long creationTime = new Date().getTime();
+        String groupName = "test_group_" + creationTime;
+        Group group = new Group(groupName, "test_add_event_in_group", creationTime);
+        Group postedGroup = groupDAO.postGroup(group);
+        assertNotNull(postedGroup);
+
+        Long date = new Date().getTime();
+        Event event = new Event("test_event_name", "test_add_event_in_group", date, date);
+        Event postedEvent = eventDAO.postEvent(event);
+        assertNotNull(postedEvent);
+
+        Long groupID = postedGroup.getId();
+        Long eventID = postedEvent.getId();
 
         Group dbGroup = groupDAO.addEvent(groupID, eventID);
         assertNotNull(dbGroup);
@@ -146,8 +182,8 @@ public class GroupDAOTestDAO extends DAOBaseAppTest {
     @Test
     public void add_not_existing_event_in_nonexistent_group_and_expected_is_null() {
 
-        Long groupID = 2222L;
-        Long eventID = 3333L;
+        Long groupID = 222222L;
+        Long eventID = 333333L;
 
         Group dbGroup = groupDAO.addEvent(groupID, eventID);
         assertNull(dbGroup);
@@ -156,18 +192,33 @@ public class GroupDAOTestDAO extends DAOBaseAppTest {
     @Test
     public void delete_event_from_group_and_expected_is_ok() {
 
-        Long groupID = 2L;
-        Long eventID = 1L;
+        Long creationTime = new Date().getTime();
+        String groupName = "test_group_" + creationTime;
+        Group group = new Group(groupName, "test_delete_event_from_group", creationTime);
+        Group postedGroup = groupDAO.postGroup(group);
+        assertNotNull(postedGroup);
 
-        Group dbGroup = groupDAO.removeEvent(groupID, eventID);
-        assertNotNull(dbGroup);
+        Long date = new Date().getTime();
+        Event event = new Event("test_event_name", "test_delete_event_from_group", date, date);
+        Event postedEvent = eventDAO.postEvent(event);
+        assertNotNull(postedEvent);
+
+        Long groupID = postedGroup.getId();
+        Long eventID = postedEvent.getId();
+
+        Group dbGroup1 = groupDAO.addEvent(groupID, eventID);
+        assertNotNull(dbGroup1);
+
+        Group dbGroup2 = groupDAO.removeEvent(groupID, eventID);
+        assertNotNull(dbGroup2);
+        System.out.println(dbGroup2);
     }
 
     @Test
     public void delete_nonexistent_event_from_nonexistent_group_and_expected_is_null() {
 
-        Long groupID = 2222L;
-        Long eventID = 1111L;
+        Long groupID = 222222L;
+        Long eventID = 111111L;
 
         Group dbGroup = groupDAO.removeEvent(groupID, eventID);
         assertNull(dbGroup);

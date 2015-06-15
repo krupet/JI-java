@@ -3,13 +3,19 @@ package ua.com.joinit.dao.impl;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.joinit.dao.UserDAO;
+import ua.com.joinit.entity.Event;
+import ua.com.joinit.entity.Group;
 import ua.com.joinit.entity.User;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by krupet on 15.03.2015.
@@ -24,20 +30,19 @@ public class UserDAOImpl implements UserDAO{
         Session session = sessionFactory.openSession();
 
         Long userId = (Long) session.save(user);
-        //TODO: as i understand user loads from hibernate lvl1 cache
-        User dbUser = (User) session.load(User.class, userId);
+        User dbUser = (User) session.get(User.class, userId);
         session.close();
 
         return dbUser;
     }
 
     @Override
-    public User updateUser(Long id, User user) {
+    public User updateUser(User user) {
+        Long id = user.getId();
         Session session = sessionFactory.openSession();
-//        session.update(user);
         session.saveOrUpdate(user);
-        session.flush(); //TODO: set autoflush!! see: http://stackoverflow.com/questions/3313458/hibernate-is-not-updating-record-wicket
-        User dbUser = (User) session.load(User.class, id);
+        session.flush(); //TODO: set auto-flush!! see: http://stackoverflow.com/questions/3313458/hibernate-is-not-updating-record-wicket
+        User dbUser = (User) session.get(User.class, id);
         session.close();
 
         return dbUser;
@@ -54,14 +59,113 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    @SuppressWarnings(value = "unchecked") // List dbUsers casting...
+    public User getUserByEmail(String email) {
+
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(User.class).add(Restrictions.eq("email", email));
+        User dbUser = (User) criteria.uniqueResult();
+
+        session.close();
+        return dbUser;
+    }
+
+        /*
+            to avoid a big number of queries against db
+            this method will return list of users without
+            their events & groups lists
+         */
+    @Override
+    @SuppressWarnings(value = "unchecked")
     public List<User> getAllUsers() {
+
         Session session = sessionFactory.openSession();
 
         Criteria criteria = session.createCriteria(User.class);
-        List dbUsers = criteria.list(); // ArrayList<???> ???
+        List<User> dbUsers = (ArrayList<User>) criteria.list();
 
         session.close();
+
+        for (User user: dbUsers) {
+            user.setGroups(null);
+            user.setEvents(null);
+        }
+
         return dbUsers;
+    }
+
+    @Override
+    public User addUserIntoGroup(Long userID, Long groupID) {
+
+        Session session = sessionFactory.openSession();
+
+        User dbUser = (User) session.get(User.class, userID);
+        Group dbGroup = (Group) session.get(Group.class, groupID);
+
+        if (dbUser != null && dbGroup != null) {
+            Set<Group> groupSet = dbUser.getGroups();
+            if (!groupSet.add(dbGroup)) return null; // already present
+        } else return null;
+
+        session.flush();
+        session.close();
+
+        return dbUser;
+    }
+
+    @Override
+    public User removeUserFromGroup(Long userID, Long groupID) {
+
+        Session session = sessionFactory.openSession();
+
+        User dbUser = (User) session.get(User.class, userID);
+        Group dbGroup = (Group) session.get(Group.class, groupID);
+
+        if (dbUser != null && dbGroup != null) {
+            Set<Group> groupSet = dbUser.getGroups();
+            if (!groupSet.remove(dbGroup)) return null; // remove() returns true if Set contained passed object
+        } else return null;
+
+        session.flush();
+        session.close();
+
+        return dbUser;
+    }
+
+    @Override
+    public User addUserIntoEvent(Long userID, Long eventID) {
+
+        Session session = sessionFactory.openSession();
+
+        User dbUser = (User) session.get(User.class, userID);
+        Event dbEvent = (Event) session.get(Event.class, eventID);
+
+        if (dbUser != null && dbEvent != null) {
+            Set<Event> eventSet = dbUser.getEvents();
+            if (!eventSet.add(dbEvent)) return null;
+        } else return null;
+
+        session.flush();
+        session.close();
+
+        return dbUser;
+    }
+
+    @Override
+    public User removeUserFromEvent(Long userID, Long eventID) {
+
+        Session session = sessionFactory.openSession();
+
+        User dbUser = (User) session.get(User.class, userID);
+        Event dbEvent = (Event) session.get(Event.class, eventID);
+
+        if (dbUser != null && dbEvent != null) {
+            Set<Event> eventSet = dbUser.getEvents();
+            if (!eventSet.remove(dbEvent)) return null;
+        } else return null;
+
+        session.flush();
+        session.close();
+
+        return dbUser;
     }
 }
