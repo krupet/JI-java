@@ -34,25 +34,33 @@ public class User implements Serializable{
     @Column(name = "user_desc")
     private String aboutYourself;
 
-//    private Set<Event> events;
-//
-//    private Set<Group> groups;
+    @ManyToMany(targetEntity = Event.class, cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    @JoinTable(name = "event_users",
+            joinColumns = { @JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "event_id")})
+    private Set<Event> events;
 
-//    public Set<Event> getEvents() {
-//        return events;
-//    }
-//
-//    public void setEvents(Set<Event> events) {
-//        this.events = events;
-//    }
-//
-//    public Set<Group> getGroups() {
-//        return groups;
-//    }
-//
-//    public void setGroups(Set<Group> groups) {
-//        this.groups = groups;
-//    }
+    @ManyToMany(targetEntity = Group.class, cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    @JoinTable(name = "group_users",
+            joinColumns = { @JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "group_id")})
+    private Set<Group> groups;
+
+    public Set<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(Set<Event> events) {
+        this.events = events;
+    }
+
+    public Set<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<Group> groups) {
+        this.groups = groups;
+    }
 
     @Override
     public String toString() {
@@ -79,6 +87,18 @@ public class User implements Serializable{
         this.email = email;
         this.phone = phone;
         this.aboutYourself = aboutYourself;
+    }
+
+    public User(String firstName, String lastName, String nickName, String email, long phone,
+                String aboutYourself, Set<Event> events, Set<Group> groups) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.nickName = nickName;
+        this.email = email;
+        this.phone = phone;
+        this.aboutYourself = aboutYourself;
+        this.events = events;
+        this.groups = groups;
     }
 
     public long getId() {
@@ -146,25 +166,27 @@ public class User implements Serializable{
 
         if (id != user.id) return false;
         if (phone != user.phone) return false;
-        if (aboutYourself != null ? !aboutYourself.equals(user.aboutYourself) : user.aboutYourself != null)
-            return false;
-        if (email != null ? !email.equals(user.email) : user.email != null) return false;
-        if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
-        if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
-        if (nickName != null ? !nickName.equals(user.nickName) : user.nickName != null) return false;
+        if (!firstName.equals(user.firstName)) return false;
+        if (!lastName.equals(user.lastName)) return false;
+        if (!nickName.equals(user.nickName)) return false;
+        if (!email.equals(user.email)) return false;
+        if (!aboutYourself.equals(user.aboutYourself)) return false;
+        if (events != null ? !events.equals(user.events) : user.events != null) return false;
+        return !(groups != null ? !groups.equals(user.groups) : user.groups != null);
 
-        return true;
     }
 
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
-        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-        result = 31 * result + (nickName != null ? nickName.hashCode() : 0);
-        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + firstName.hashCode();
+        result = 31 * result + lastName.hashCode();
+        result = 31 * result + nickName.hashCode();
+        result = 31 * result + email.hashCode();
         result = 31 * result + (int) (phone ^ (phone >>> 32));
-        result = 31 * result + (aboutYourself != null ? aboutYourself.hashCode() : 0);
+        result = 31 * result + aboutYourself.hashCode();
+        result = 31 * result + (events != null ? events.hashCode() : 0);
+        result = 31 * result + (groups != null ? groups.hashCode() : 0);
         return result;
     }
 }

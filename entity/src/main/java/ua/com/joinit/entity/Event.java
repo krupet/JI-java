@@ -11,6 +11,7 @@ import java.util.Set;
 @Entity
 @Table(name = "events")
 public class Event {
+
     @Id
     @Column(name = "event_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,13 +29,6 @@ public class Event {
     @Column(name = "event_creation_date")
     private long creationDate;
 
-    @JsonIgnore
-    @ManyToMany(targetEntity = User.class, cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-    @JoinTable(name = "event_users",
-            joinColumns = { @JoinColumn(name = "event_id")},
-            inverseJoinColumns = {@JoinColumn(name = "user_id")})
-    private Set<User> users;
-
     public Event() {
     }
 
@@ -44,15 +38,6 @@ public class Event {
         this.description = description;
         this.eventDate = eventDate;
         this.creationDate = creationDate;
-    }
-
-    // just for tests
-    public Event(String eventName, String description, long eventDate, long creationDate, Set<User> users) {
-        this.eventName = eventName;
-        this.description = description;
-        this.eventDate = eventDate;
-        this.creationDate = creationDate;
-        this.users = users;
     }
 
     @Override
@@ -106,14 +91,6 @@ public class Event {
         this.creationDate = creationDate;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -121,20 +98,19 @@ public class Event {
 
         Event event = (Event) o;
 
-        if (creationDate != event.creationDate) return false;
-        if (eventDate != event.eventDate) return false;
         if (id != event.id) return false;
-        if (description != null ? !description.equals(event.description) : event.description != null) return false;
-        if (eventName != null ? !eventName.equals(event.eventName) : event.eventName != null) return false;
+        if (eventDate != event.eventDate) return false;
+        if (creationDate != event.creationDate) return false;
+        if (!eventName.equals(event.eventName)) return false;
+        return description.equals(event.description);
 
-        return true;
     }
 
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (eventName != null ? eventName.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + eventName.hashCode();
+        result = 31 * result + description.hashCode();
         result = 31 * result + (int) (eventDate ^ (eventDate >>> 32));
         result = 31 * result + (int) (creationDate ^ (creationDate >>> 32));
         return result;

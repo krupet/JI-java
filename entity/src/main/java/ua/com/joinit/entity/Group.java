@@ -24,12 +24,6 @@ public class Group {
     @Column(name = "group_creation_date")
     private long creationDate;
 
-    @ManyToMany(targetEntity = User.class, cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-    @JoinTable(name = "group_users",
-            joinColumns = { @JoinColumn(name = "group_id")},
-            inverseJoinColumns = {@JoinColumn(name = "user_id")})
-    private Set<User> users;
-
     @ManyToMany(targetEntity = Event.class, cascade = {CascadeType.ALL})
     @JoinTable(name = "group_events",
             joinColumns = { @JoinColumn(name = "group_id")},
@@ -39,20 +33,16 @@ public class Group {
     public Group() {
     }
 
-    //just for tests
-    public Group(String name, String description, long creationDate, Set<User> users) {
+    public Group(String name, String description, long creationDate) {
         this.name = name;
         this.description = description;
         this.creationDate = creationDate;
-        this.users = users;
     }
 
-    //just for tests
-    public Group(String name, String description, long creationDate, Set<User> users, Set<Event> events) {
+    public Group(String name, String description, long creationDate, Set<Event> events) {
         this.name = name;
         this.description = description;
         this.creationDate = creationDate;
-        this.users = users;
         this.events = events;
     }
 
@@ -98,13 +88,6 @@ public class Group {
         this.creationDate = creationDate;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
 
     public Set<Event> getEvents() {
         return events;
@@ -121,22 +104,21 @@ public class Group {
 
         Group group = (Group) o;
 
-        if (creationDate != group.creationDate) return false;
         if (id != group.id) return false;
-        if (description != null ? !description.equals(group.description) : group.description != null) return false;
-        if (name != null ? !name.equals(group.name) : group.name != null) return false;
-        if (users != null ? !users.equals(group.users) : group.users != null) return false;
+        if (creationDate != group.creationDate) return false;
+        if (!name.equals(group.name)) return false;
+        if (!description.equals(group.description)) return false;
+        return !(events != null ? !events.equals(group.events) : group.events != null);
 
-        return true;
     }
 
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + name.hashCode();
+        result = 31 * result + description.hashCode();
         result = 31 * result + (int) (creationDate ^ (creationDate >>> 32));
-        result = 31 * result + (users != null ? users.hashCode() : 0);
+        result = 31 * result + (events != null ? events.hashCode() : 0);
         return result;
     }
 }

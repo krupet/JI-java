@@ -14,6 +14,7 @@ import ua.com.joinit.entity.User;
 
 import javax.jws.soap.SOAPBinding;
 import javax.transaction.Transaction;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,14 +41,28 @@ public class CriteriaTestDAO extends DAOBaseAppTest {
 //    }
 
 
-    @Test
-    public void get_events_list_by_user() {
-        Session session = sessionFactory.openSession();
-        Criteria criteria = session.createCriteria(Event.class);
-        criteria.createAlias("users", "e");
-        criteria.add(Restrictions.eq("e.id", 3L));
-        List events = criteria.list();
-
-        System.out.println(events);
-    }
+    /*
+        Old test when Event has users Set
+     */
+//    @Test
+//    @SuppressWarnings(value = "unchecked")
+//    public void get_events_list_by_user() {
+//        Gson gson = new Gson();
+//
+//        Session session = sessionFactory.openSession();
+//        Criteria criteria = session.createCriteria(Event.class);
+//        criteria.createAlias("users", "e");
+//        criteria.add(Restrictions.eq("e.id", 3L));
+//        ArrayList<Event> events = (ArrayList<Event>) criteria.list();
+//
+//        session.close();
+//        for (Event event: events) {
+//            event.setUsers(null);
+//        }
+//
+//        String json = gson.toJson(events);
+//
+//        System.out.println(events);
+//        System.out.println(json);
+//    }
 }
