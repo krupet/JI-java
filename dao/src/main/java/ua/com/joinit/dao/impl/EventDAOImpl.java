@@ -1,13 +1,17 @@
 package ua.com.joinit.dao.impl;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import ua.com.joinit.dao.EventDAO;
 import ua.com.joinit.entity.Event;
 import ua.com.joinit.entity.User;
 
 import javax.jws.soap.SOAPBinding;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -64,47 +68,26 @@ public class EventDAOImpl implements EventDAO{
         return dbEvent;
     }
 
-    public Event deleteUser(Long eventID, Long userID) {
-        return null;
-    }
+    /*
+        to reduce db loading method returns users without events and groups lists
+     */
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public List<User> getListOfUsersByEventID(Long eventID) {
 
-//    @Override
-//    public Event addUser(Long eventID, Long userID) {
-//
-//        Session session = sessionFactory.openSession();
-//        Event dbEvent = (Event) session.get(Event.class, eventID);
-//        User dbUser = (User) session.get(User.class, userID);
-//
-//        if (dbEvent != null && dbUser != null) {
-//            Set<User> userSet = dbEvent.getUsers();
-//            if (!userSet.contains(dbUser)) { // redundant? maybe.
-//                userSet.add(dbUser);
-//            } else return null;
-//        } else return null;
-//
-//        session.flush();
-//        session.close();
-//
-//        return dbEvent;
-//    }
-//
-//    @Override
-//    public Event deleteUser(Long eventID, Long userID) {
-//
-//        Session session = sessionFactory.openSession();
-//        Event dbEvent = (Event) session.get(Event.class, eventID);
-//        User dbUser = (User) session.get(User.class, userID);
-//
-//        if (dbEvent != null && dbUser != null) {
-//            Set<User> userSet = dbEvent.getUsers();
-//            if (userSet.contains(dbUser)) {
-//                userSet.remove(dbUser);
-//            } else return null;
-//        } else return null;
-//
-//        session.flush();
-//        session.close();
-//
-//        return dbEvent;
-//    }
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.createAlias("events", "e");
+        criteria.add(Restrictions.eq("e.id", eventID));
+        List<User> users = (ArrayList<User>) criteria.list();
+
+        session.close();
+
+        for (User user: users) {
+            user.setEvents(null);
+            user.setGroups(null);
+        }
+
+        return users;
+    }
 }

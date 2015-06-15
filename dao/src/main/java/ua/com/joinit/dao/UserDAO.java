@@ -8,6 +8,7 @@ import java.util.List;
  * Created by krupet on 15.03.2015.
  */
 public interface UserDAO {
+
     User postUser(User user);
 
     User updateUser(User user);

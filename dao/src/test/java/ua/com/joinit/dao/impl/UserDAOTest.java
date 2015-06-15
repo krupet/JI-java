@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 /**
  * Created by krupet on 15.03.2015.
  */
-public class UserDAOTestDAO extends DAOBaseAppTest {
+public class UserDAOTest extends DAOBaseAppTest {
 
     @Autowired
     private UserDAO userDAO;
