@@ -69,23 +69,31 @@ public class EventDAOImpl implements EventDAO{
     }
 
     /*
-        to reduce db loading method returns users without events and groups lists
+        to reduce db loading method returns
+        users without events and groups lists
      */
     @Override
     @SuppressWarnings(value = "unchecked")
     public List<User> getListOfUsersByEventID(Long eventID) {
 
         Session session = sessionFactory.openSession();
-        Criteria criteria = session.createCriteria(User.class);
-        criteria.createAlias("events", "e");
-        criteria.add(Restrictions.eq("e.id", eventID));
-        List<User> users = (ArrayList<User>) criteria.list();
+        Event dbEvent = (Event) session.get(Event.class, eventID);
+
+        List<User> users = null;
+        if (dbEvent != null) {
+            Criteria criteria = session.createCriteria(User.class);
+            criteria.createAlias("events", "e");
+            criteria.add(Restrictions.eq("e.id", eventID));
+            users = (ArrayList<User>) criteria.list();
+        } else return users;
 
         session.close();
 
-        for (User user: users) {
-            user.setEvents(null);
-            user.setGroups(null);
+        if (users != null) {
+            for (User user: users) {
+                user.setEvents(null);
+                user.setGroups(null);
+            }
         }
 
         return users;

@@ -3,6 +3,7 @@ package ua.com.joinit.dao.impl;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import ua.com.joinit.dao.GroupDAO;
 import ua.com.joinit.entity.Event;
@@ -122,5 +123,37 @@ public class GroupDAOImpl implements GroupDAO {
         session.close();
 
         return dbGroup;
+    }
+
+    /*
+        to reduce db loading method returns
+        users without events and groups lists
+     */
+    @SuppressWarnings(value = "unchecked")
+    @Override
+    public List<User> getAllUsersInAGroupByGroupID(Long groupID) {
+
+        Session session = sessionFactory.openSession();
+        Group dbGroup = (Group) session.get(Group.class, groupID);
+
+        List<User> users = null;
+        if (dbGroup != null) {
+            Criteria criteria = session.createCriteria(User.class);
+            criteria.createAlias("groups", "g");
+            criteria.add(Restrictions.eq("g.id", groupID));
+
+            users = (ArrayList<User>) criteria.list();
+        } else return users;
+
+        session.close();
+
+        if (users != null) {
+            for (User user: users) {
+                user.setEvents(null);
+                user.setGroups(null);
+            }
+        }
+
+        return users;
     }
 }

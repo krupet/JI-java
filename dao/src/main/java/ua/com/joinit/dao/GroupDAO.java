@@ -1,6 +1,8 @@
 package ua.com.joinit.dao;
 
+import ua.com.joinit.entity.Event;
 import ua.com.joinit.entity.Group;
+import ua.com.joinit.entity.User;
 
 import java.util.List;
 
@@ -22,4 +24,6 @@ public interface GroupDAO {
     Group addEvent(Long groupID, Long eventID);
 
     Group removeEvent(Long groupID, Long eventID);
+
+    List<User> getAllUsersInAGroupByGroupID(Long groupID);
 }

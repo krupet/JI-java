@@ -5,9 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ua.com.joinit.dao.DAOBaseAppTest;
 import ua.com.joinit.dao.EventDAO;
 import ua.com.joinit.dao.GroupDAO;
+import ua.com.joinit.dao.UserDAO;
 import ua.com.joinit.entity.Event;
 import ua.com.joinit.entity.Group;
+import ua.com.joinit.entity.User;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +26,9 @@ public class GroupDAOTest extends DAOBaseAppTest {
 
     @Autowired
     private EventDAO eventDAO;
+
+    @Autowired
+    private UserDAO userDAO;
 
     @Test
     public void post_new_group_with_unique_name_and_expected_ok() {
@@ -224,4 +230,46 @@ public class GroupDAOTest extends DAOBaseAppTest {
         assertNull(dbGroup);
     }
 
+    @Test
+    public void get_list_of_users_by_group_id() {
+
+        Long creationTime = new Date().getTime();
+        String groupName = "group_" + creationTime;
+        Group dbGroup = new Group(groupName, "test_get_users_of_group", creationTime);
+        Group postedGroup = groupDAO.postGroup(dbGroup);
+        assertNotNull(postedGroup);
+
+        Long groupID = dbGroup.getId();
+
+        List<Long> userIds = new ArrayList<>();
+        Long userID;
+        int numberOfUsers = 4;
+        for (int i = 0; i < numberOfUsers; i++) {
+
+            Long emailConstant = new Date().getTime();
+            String email = "" + emailConstant + "@gmail.com";
+            User testUser = new User("test_f_name", "test_last_name", "test_nickname",
+                    email, 1234567890L, "test_desc");
+            User postedUser = userDAO.postUser(testUser);
+            assertNotNull(postedUser);
+
+            userID = postedUser.getId();
+            userIds.add(userID);
+
+            User dbUser = userDAO.addUserIntoGroup(userID, groupID);
+            assertNotNull(dbUser);
+        }
+
+        List<User> groupUsers = groupDAO.getAllUsersInAGroupByGroupID(groupID);
+        assertNotNull(groupUsers);
+    }
+
+    @Test
+    public void get_users_by_not_existing_group_id_and_expected_is_null() {
+
+        Long groupID = 2222222L;
+        List<User> groupUsers = groupDAO.getAllUsersInAGroupByGroupID(groupID);
+        assertNull(groupUsers);
+        System.out.println(groupUsers);
+    }
 }

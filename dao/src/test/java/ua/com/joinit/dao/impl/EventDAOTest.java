@@ -1,5 +1,6 @@
 package ua.com.joinit.dao.impl;
 
+import com.google.gson.Gson;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ua.com.joinit.dao.DAOBaseAppTest;
@@ -122,6 +123,13 @@ public class EventDAOTest extends DAOBaseAppTest {
 
         List<User> eventUsers = eventDAO.getListOfUsersByEventID(eventID);
         assertNotNull(eventUsers);
-        System.out.println(eventUsers);
+    }
+
+    @Test
+    public void get_list_of_users_by_not_existing_event_id_and_expected_is_null() {
+
+        Long eventID = 222222222L;
+        List<User> eventUsers = eventDAO.getListOfUsersByEventID(eventID);
+        assertNull(eventUsers);
     }
 }
