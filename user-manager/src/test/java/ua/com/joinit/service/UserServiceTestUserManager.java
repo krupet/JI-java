@@ -16,6 +16,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import static org.junit.Assert.*;
 /**
  * Created by krupet on 3/3/15.
  */
@@ -36,6 +37,7 @@ public class UserServiceTestUserManager extends UserManagerBaseAppTest {
 
     @Test
     public void postNewUserAndExpectedIsOk() {
+
         User user = new User();
 
 //        UserMockDAO userMockDAO = Mockito.mock(UserMockDAOImpl.class); // (1)
@@ -47,6 +49,7 @@ public class UserServiceTestUserManager extends UserManagerBaseAppTest {
 
     @Test
     public void postNewUserAndExpectedHisIdIsNotNull() {
+
         User user = new User();
         user.setFirstName("test_first_name");
         user.setLastName("test_last_name");
@@ -74,12 +77,12 @@ public class UserServiceTestUserManager extends UserManagerBaseAppTest {
 //
     @Test
     public  void update_existing_user_and_expected_is_not_null() {
-        Long id = 1L;
+
         User mockedUser = new User();
         User updUser = new User();
-        when(userMockDAO.updateUser(eq(id), any(User.class))).thenReturn(mockedUser);
-        User updatedUser = userService.updateUser(id, updUser);
-        verify(userMockDAO,times(1)).updateUser(eq(id), any(User.class));
+        when(userMockDAO.updateUser(any(User.class))).thenReturn(mockedUser);
+        User updatedUser = userService.updateUser(updUser);
+        verify(userMockDAO,times(1)).updateUser(any(User.class));
 
         assertNotNull(updatedUser);
     }
@@ -96,11 +99,10 @@ public class UserServiceTestUserManager extends UserManagerBaseAppTest {
         mockedUser.setAboutYourself("test_about_yourself");
         mockedUser.setId(2L);
 
-        Long id = 1L;
         User updUser = new User();
-        when(userMockDAO.updateUser(eq(id), any(User.class))).thenReturn(mockedUser);
-        User updatedUser = userService.updateUser(id, updUser);
-        verify(userMockDAO, times(1)).updateUser(eq(id), any(User.class));
+        when(userMockDAO.updateUser(any(User.class))).thenReturn(mockedUser);
+        User updatedUser = userService.updateUser(updUser);
+        verify(userMockDAO, times(1)).updateUser(any(User.class));
 
         assertEquals("test_first_name", updatedUser.getFirstName());
         assertEquals("test_nick_name", updatedUser.getNickName());
@@ -109,6 +111,7 @@ public class UserServiceTestUserManager extends UserManagerBaseAppTest {
 
     @Test
     public void get_existing_user_and_expected_is_ok() {
+
         User retrievedUser = new User();
         Long id = 1L;
         when(userMockDAO.getUser(id)).thenReturn(retrievedUser);
@@ -162,5 +165,55 @@ public class UserServiceTestUserManager extends UserManagerBaseAppTest {
         assertNotNull(users);
         assertNotNull(users.get(0));
         assertEquals(1L, users.get(0).getId());
+    }
+
+    @Test
+    public void get_user_by_email_and_expected_is_ok() {
+
+        String email = "email@gmail.com";
+        User mockedUser = new User();
+        mockedUser.setId(1L);
+        mockedUser.setEmail(email);
+
+        when(userMockDAO.getUserByEmail(email)).thenReturn(mockedUser);
+        User retrievedUser = userService.getUserByEmail(email);
+        assertNotNull(retrievedUser);
+        verify(userMockDAO, times(1)).getUserByEmail(email);
+    }
+
+    @Test
+    public void add_user_into_group() {
+
+        when(userMockDAO.addUserIntoGroup(anyLong(), anyLong())).thenReturn(new User());
+        User retrievedUser = userService.addUserIntoGroup(1L, 1L);
+        verify(userMockDAO, times(1)).addUserIntoGroup(anyLong(), anyLong());
+        assertNotNull(retrievedUser);
+    }
+
+    @Test
+    public void remove_user_from_group() {
+
+        when(userMockDAO.removeUserFromGroup(anyLong(), anyLong())).thenReturn(new User());
+        User retrievedUser = userService.removeUserFromGroup(1L, 1L);
+        verify(userMockDAO, times(1)).removeUserFromGroup(anyLong(), anyLong());
+        assertNotNull(retrievedUser);
+    }
+
+    @Test
+    public void add_user_into_event() {
+
+        when(userMockDAO.addUserIntoEvent(anyLong(), anyLong())).thenReturn(new User());
+        User retrievedUser = userService.addUserIntoEvent(1L, 1L);
+        verify(userMockDAO, times(1)).addUserIntoEvent(anyLong(), anyLong());
+        assertNotNull(retrievedUser);
+    }
+
+    @Test
+    public void remove_user_from_event() {
+
+        when(userMockDAO.removeUserFromEvent(anyLong(), anyLong())).thenReturn(new User());
+        User retrievedUser = userService.removeUserFromEvent(1L, 1L);
+        verify(userMockDAO, times(1)).removeUserFromEvent(anyLong(), anyLong());
+        assertNotNull(retrievedUser);
     }
 }

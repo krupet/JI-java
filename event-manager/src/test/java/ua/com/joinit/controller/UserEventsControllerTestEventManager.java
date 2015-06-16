@@ -12,8 +12,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import ua.com.joinit.EventManagerBaseAppTest;
 import ua.com.joinit.entity.Event;
+import ua.com.joinit.entity.User;
 import ua.com.joinit.service.EventService;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import static org.mockito.Matchers.any;
@@ -158,75 +160,28 @@ public class UserEventsControllerTestEventManager extends EventManagerBaseAppTes
     }
 
     @Test
-    public void add_user_to_event_and_accepted_expected() throws Exception {
+    public void get_users_list_by_event_id_by_event_id_and_expected_is_accepted() throws Exception {
 
-        when(eventService.addUser(1L, 1L)).thenReturn(new Event());
+        when(eventService.getListOfUsersByEventID(1L)).thenReturn(new ArrayList<User>());
 
-        mockMvc.perform(post(URL_PREFIX + "/adduser?eventID=1&userID=1"))
+        mockMvc.perform(get(URL_PREFIX + "/getusers?eventID=1"))
                 .andExpect(status().isAccepted())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
-        verify(eventService, times(1)).addUser(1L, 1L);
+        verify(eventService, times(1)).getListOfUsersByEventID(1L);
     }
 
     @Test
-    public void add_user_to_event_and_500_error_message_expected() throws Exception {
+    public void get_users_list_by_event_id_by_event_id_and_expected_is_error_message() throws Exception {
 
-        when(eventService.addUser(111L, 121L)).thenReturn(null);
+        when(eventService.getListOfUsersByEventID(anyLong())).thenReturn(null);
 
-        mockMvc.perform(post(URL_PREFIX + "/adduser?eventID=111&userID=121"))
+        mockMvc.perform(get(URL_PREFIX + "/getusers?eventID=1"))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{\"reason\":\"internal server error!\"}"));
+                .andDo(print());
 
-        verify(eventService, times(1)).addUser(111L, 121L);
-    }
-
-    @Test
-    public void add_user_to_event_and_bad_request_error_message_expected() throws Exception {
-
-        mockMvc.perform(post(URL_PREFIX + "/adduser?eventID=0&userID=0"))
-                .andExpect(status().isInternalServerError())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{\"reason\":\"bad request!\"}"));
-
-        verify(eventService, times(0)).addUser(anyLong(), anyLong());
-    }
-
-    @Test
-    public void delete_user_from_event_and_expected_is_ok() throws Exception {
-
-        when(eventService.deleteUser(1L, 1L)).thenReturn(new Event());
-
-        mockMvc.perform(delete(URL_PREFIX + "/deleteuser?eventID=1&userID=1"))
-                .andExpect(status().isAccepted())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-
-        verify(eventService, times(1)).deleteUser(1L, 1L);
-    }
-
-    @Test
-    public void delete_user_from_event_and_500_error_message_expected() throws Exception {
-
-        when(eventService.deleteUser(111L, 121L)).thenReturn(null);
-
-        mockMvc.perform(delete(URL_PREFIX + "/deleteuser?eventID=111&userID=121"))
-                .andExpect(status().isInternalServerError())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{\"reason\":\"internal server error!\"}"));
-
-        verify(eventService, times(1)).deleteUser(111L, 121L);
-    }
-
-    @Test
-    public void delete_user_from_event_and_bad_request_error_message_expected() throws Exception {
-
-        mockMvc.perform(delete(URL_PREFIX + "/deleteuser?eventID=0&userID=0"))
-                .andExpect(status().isInternalServerError())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{\"reason\":\"bad request!\"}"));
-
-        verify(eventService, times(0)).deleteUser(anyLong(), anyLong());
+        verify(eventService, times(1)).getListOfUsersByEventID(1L);
     }
 
     @Test

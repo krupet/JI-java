@@ -15,7 +15,7 @@ public class UserMockDAOImpl implements UserDAO {
     }
 
     @Override
-    public User updateUser(Long id, User user) {
+    public User updateUser(User user) {
         return null;
     }
 
@@ -26,6 +26,31 @@ public class UserMockDAOImpl implements UserDAO {
 
     @Override
     public List<User> getAllUsers() {
+        return null;
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return null;
+    }
+
+    @Override
+    public User addUserIntoGroup(Long userID, Long groupID) {
+        return null;
+    }
+
+    @Override
+    public User removeUserFromGroup(Long userID, Long groupID) {
+        return null;
+    }
+
+    @Override
+    public User addUserIntoEvent(Long userID, Long eventID) {
+        return null;
+    }
+
+    @Override
+    public User removeUserFromEvent(Long userID, Long eventID) {
         return null;
     }
 }

@@ -1,6 +1,7 @@
 package ua.com.joinit.dao.impl;
 
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projection;
@@ -53,6 +54,8 @@ public class UserDAOImpl implements UserDAO{
 
         Session session = sessionFactory.openSession();
         User dbUser = (User) session.get(User.class, id);
+        Hibernate.initialize(dbUser.getGroups());
+        Hibernate.initialize(dbUser.getEvents());
 
         session.close();
         return dbUser;

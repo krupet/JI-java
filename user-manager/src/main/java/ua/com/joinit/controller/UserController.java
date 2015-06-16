@@ -16,33 +16,32 @@ import java.util.List;
  * Created by krupet on 03.02.15.
  */
 @Controller
-@RequestMapping("/")
+@RequestMapping("/users")
 public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "say_hi", method = RequestMethod.GET)
     public ResponseEntity<String> getMessageFromUser(){
         return new ResponseEntity<>("hi", HttpStatus.OK);
     }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.GET, produces = "application/json")
-//    public ResponseEntity<String> getUserById(@PathVariable("id") Long id) {
-    public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
-        User requestedUser = userService.getUser(id);
+    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<User> getUserById(@RequestParam(value = "email", required = true) String email) {
 
-        if (requestedUser == null) {
-            throw new RuntimeException("There is no user with such id");
-        }
+        if (email == null) throw new RuntimeException("bad request: no query parameter!");
+        User dbUser = userService.getUserByEmail(email);
+        if (dbUser == null) throw new RuntimeException("bad request: no user with such email!");
+        return  new ResponseEntity<>(dbUser, HttpStatus.OK);
+    }
 
-//        following code was used for much older version of this controller...
-//        you`ll ask why?
-//        because I don`t implement object mapper (json) in my context class.
-//
-//        Gson gson = new Gson();
-//        return  new ResponseEntity<>(gson.toJson(user), HttpStatus.OK);
+    @RequestMapping(value = "{userID}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<User> getUserById(@PathVariable(value = "userID") Long userID) {
 
-        return  new ResponseEntity<>(requestedUser, HttpStatus.OK);
+        if (userID <= 0L) throw new RuntimeException("bad request: invalid ID!");
+        User dbUser = userService.getUser(userID);
+        if (dbUser == null) throw new RuntimeException("bad request: no user with such id!");
+        return  new ResponseEntity<>(dbUser, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
@@ -51,17 +50,17 @@ public class UserController {
         return new ResponseEntity<>(postedUser, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.PUT, produces = "application/json")
-    public ResponseEntity<User> putUser(@PathVariable Long id, @RequestBody User user) {
-        User updatedUser = userService.updateUser(id, user);
+    @RequestMapping(method = RequestMethod.PUT, produces = "application/json")
+    public ResponseEntity<User> putUser(@RequestBody User user) {
+        User updatedUser = userService.updateUser(user);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "users", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> usersList = userService.getAllUsers();
-        return new ResponseEntity<>(usersList, HttpStatus.OK);
-    }
+//    @RequestMapping(value = "/getAllUsersList", method = RequestMethod.GET, produces = "application/json")
+//    public ResponseEntity<List<User>> getAllUsers() {
+//        List<User> usersList = userService.getAllUsers();
+//        return new ResponseEntity<>(usersList, HttpStatus.OK);
+//    }
 
     @ExceptionHandler(Exception.class)
     @RequestMapping(produces = "application/json")

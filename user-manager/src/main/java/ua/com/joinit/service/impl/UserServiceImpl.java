@@ -20,8 +20,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(Long id, User user) {
-        return userDAO.updateUser(id, user);
+    public User updateUser(User user) {
+        return userDAO.updateUser(user);
     }
 
     @Override
@@ -32,5 +32,30 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         return userDAO.getAllUsers();
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userDAO.getUserByEmail(email);
+    }
+
+    @Override
+    public User addUserIntoGroup(Long userID, Long groupID) {
+        return userDAO.addUserIntoGroup(userID, groupID);
+    }
+
+    @Override
+    public User removeUserFromGroup(Long userID, Long groupID) {
+        return userDAO.removeUserFromGroup(userID, groupID);
+    }
+
+    @Override
+    public User addUserIntoEvent(Long userID, Long eventID) {
+        return userDAO.addUserIntoEvent(userID, eventID);
+    }
+
+    @Override
+    public User removeUserFromEvent(Long userID, Long eventID) {
+        return userDAO.removeUserFromEvent(userID, eventID);
     }
 }

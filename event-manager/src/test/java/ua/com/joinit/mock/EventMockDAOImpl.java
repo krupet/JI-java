@@ -2,6 +2,9 @@ package ua.com.joinit.mock;
 
 import ua.com.joinit.dao.EventDAO;
 import ua.com.joinit.entity.Event;
+import ua.com.joinit.entity.User;
+
+import java.util.List;
 
 /**
  * Created by krupet on 10.06.2015.
@@ -28,12 +31,7 @@ public class EventMockDAOImpl implements EventDAO {
     }
 
     @Override
-    public Event addUser(Long eventID, Long userID) {
-        return null;
-    }
-
-    @Override
-    public Event deleteUser(Long eventID, Long userID) {
+    public List<User> getListOfUsersByEventID(Long eventID) {
         return null;
     }
 }

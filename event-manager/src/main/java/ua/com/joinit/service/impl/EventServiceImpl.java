@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.joinit.dao.EventDAO;
 import ua.com.joinit.entity.Event;
+import ua.com.joinit.entity.User;
 import ua.com.joinit.service.EventService;
+
+import java.util.List;
 
 /**
  * Created by krupet on 10.06.2015.
@@ -35,12 +38,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event deleteUser(Long eventID, Long userID) {
-        return eventDAO.deleteUser(eventID, userID);
-    }
-
-    @Override
-    public Event addUser(Long eventID, Long userID) {
-        return eventDAO.addUser(eventID, userID);
+    public List<User> getListOfUsersByEventID(Long eventID) {
+        return eventDAO.getListOfUsersByEventID(eventID);
     }
 }

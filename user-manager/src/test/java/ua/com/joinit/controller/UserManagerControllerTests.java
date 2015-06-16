@@ -32,6 +32,9 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
  * Created by krupet on 25.02.2015.
  */
 public class UserManagerControllerTests extends UserManagerBaseAppTest {
+
+    public static final String URL_BASE = "/users";
+
     private MockMvc mockMvc;
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
@@ -88,7 +91,6 @@ public class UserManagerControllerTests extends UserManagerBaseAppTest {
         mockMvc.perform(get("/" + id.toString()))
                 .andExpect(status().is(200))
                 .andExpect(content().json(expectedJsonUser));
-//                .andDo(print());
 
         verify(userService, times(1)).getUser(id);
     }
@@ -191,40 +193,29 @@ public class UserManagerControllerTests extends UserManagerBaseAppTest {
     see when(...) clause
      */
     @Test
-    public void put_user_and_expekted_is_valid_json_user() throws Exception {
+    public void put_user_and_expected_is_valid_json_user() throws Exception {
 
         Long id = 1234567L;
-        User putUser = new User();
-        putUser.setFirstName("test_first_name");
-        putUser.setLastName("test_last_name");
-        putUser.setNickName("test_nick_name");
-        putUser.setEmail("testEmail@gmail.com");
-        putUser.setPhone(1234567890L);
-        putUser.setAboutYourself("test_about_yourself");
-
+        User putUser = new User("test_first_name", "test_last_name", "test_nick_name", "testEmail@gmail.com",
+                1234567890L, "test_about_yourself");
         putUser.setId(id);
 
         Gson gson = new Gson();
         String putJsonUser = gson.toJson(putUser);
 
-        User updatedUser = new User();
-        updatedUser.setFirstName("upd_test_first_name");
-        updatedUser.setLastName("upd_test_last_name");
-        updatedUser.setNickName("upd_test_nick_name");
-        updatedUser.setEmail("upd_testEmail@gmail.com");
-        updatedUser.setPhone(1234567890L);
-        updatedUser.setAboutYourself("upd_test_about_yourself");
-
+        User updatedUser = new User("upd_test_first_name", "upd_test_first_name", "upd_test_nick_name",
+                "upd_testEmail@gmail.com", 1234567890L, "upd_test_about_yourself");
         updatedUser.setId(id);
-        when(userService.updateUser(eq(id), any(User.class))).thenReturn(updatedUser);
 
-        mockMvc.perform(put("/" + id.toString())
+        when(userService.updateUser(any(User.class))).thenReturn(updatedUser);
+
+        mockMvc.perform(put("/")
                 .content(putJsonUser)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().is(200));
 
-        verify(userService, times(1)).updateUser(eq(id), any(User.class));
+        verify(userService, times(1)).updateUser(any(User.class));
     }
 
     @Test
@@ -232,10 +223,7 @@ public class UserManagerControllerTests extends UserManagerBaseAppTest {
         Long id = 123L;
         String errMessage = "some unknown internal server error";
         when(userService.getUser(eq(id))).thenThrow(new RuntimeException(errMessage));
-//        when(userService.getUser(eq(id))).thenThrow(new Exception(errMessage));
-//        org.mockito.exceptions.base.MockitoException:
-//        Checked exception is invalid for this method!
-//                Invalid: java.lang.Exception: some unknown internal server error
+
         mockMvc.perform(get("/{id}", id.toString()))
                 .andDo(print())
                 .andExpect(content().json("{\"reason\":\"" + errMessage + "\"}"))
@@ -276,12 +264,23 @@ public class UserManagerControllerTests extends UserManagerBaseAppTest {
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(content().json(expectedList)) //TODO: exception because of array comparing
-//                .andExpect(content().string(expectedList))
                 .andExpect(content().string(expectedList));
-//                .andDo(print());
 
         verify(userService, times(1)).getAllUsers();
+    }
 
+    @Test
+    public void get_user_by_email() throws Exception {
+
+        String email = "9cb14b499be76bb04fdbef92f29c744b"; // MD5
+
+//        when(userService.getUserByEmail(email)).thenReturn(new User());
+
+        mockMvc.perform(get(URL_BASE + "?email=" + email))
+//                .andExpect(status().isAccepted())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(print());
+
+//        verify(userService, times(1)).getUserByEmail(email);
     }
 }

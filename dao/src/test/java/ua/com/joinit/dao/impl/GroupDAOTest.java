@@ -217,7 +217,6 @@ public class GroupDAOTest extends DAOBaseAppTest {
 
         Group dbGroup2 = groupDAO.removeEvent(groupID, eventID);
         assertNotNull(dbGroup2);
-        System.out.println(dbGroup2);
     }
 
     @Test
@@ -270,6 +269,5 @@ public class GroupDAOTest extends DAOBaseAppTest {
         Long groupID = 2222222L;
         List<User> groupUsers = groupDAO.getAllUsersInAGroupByGroupID(groupID);
         assertNull(groupUsers);
-        System.out.println(groupUsers);
     }
 }

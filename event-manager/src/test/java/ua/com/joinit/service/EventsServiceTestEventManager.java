@@ -9,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ua.com.joinit.EventManagerBaseAppTest;
 import ua.com.joinit.dao.EventDAO;
 import ua.com.joinit.entity.Event;
+import ua.com.joinit.entity.User;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
@@ -82,18 +85,9 @@ public class EventsServiceTestEventManager extends EventManagerBaseAppTest {
     @Test
     public void delete_user_from_event_by_id_and_expected_is_ok() {
 
-        when(eventMockDAO.deleteUser(anyLong(), anyLong())).thenReturn(new Event());
-        Event serviceEvent = eventService.deleteUser(1L, 1L);
-        verify(eventMockDAO, times(1)).deleteUser(anyLong(), anyLong());
-        assertNotNull(serviceEvent);
-    }
-
-    @Test
-    public void add_user_into_group_and_expected_is_ok() {
-
-        when(eventMockDAO.addUser(anyLong(), anyLong())).thenReturn(new Event());
-        Event serviceEvent = eventService.addUser(1L, 1L);
-        verify(eventMockDAO, times(1)).addUser(anyLong(), anyLong());
-        assertNotNull(serviceEvent);
+        when(eventMockDAO.getListOfUsersByEventID(anyLong())).thenReturn(new ArrayList<User>());
+        List<User> userList = eventService.getListOfUsersByEventID(1L);
+        verify(eventMockDAO, times(1)).getListOfUsersByEventID(anyLong());
+        assertNotNull(userList);
     }
 }
