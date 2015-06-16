@@ -69,7 +69,7 @@ public class TestOrmConfig {
                 setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
                 setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
                 setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
-                setProperty("hibernate.format_sql", "true");
+                setProperty("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
                 setProperty("hibernate.globally_quoted_identifiers", "true");
                 setProperty("hibernate.connection.useUnicode", "true");
                 setProperty("hibernate.connection.characterEncoding", "utf8");
