@@ -17,8 +17,7 @@ import ua.com.joinit.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -62,33 +61,35 @@ public class UserManagerControllerTests extends UserManagerBaseAppTest {
 
     @Test
     public void simple() throws Exception {
-        mockMvc.perform(get("/"))
+        mockMvc.perform(get(URL_BASE + "/say_hi"))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void get_user_by_id_and_expected_is_ok200() throws Exception {
-        mockMvc.perform(get("/1"))
+
+        Long id = 2L;
+        when(userService.getUser(id)).thenReturn(new User());
+
+        mockMvc.perform(get(URL_BASE + "/" + id))
                 .andExpect(status().is(200));
+
+        verify(userService, times(1)).getUser(id);
     }
 
     @Test
     public void get_user_by_id_and_expected_is_valid_user() throws Exception {
+
         Long id = 1234567L;
-        User mockUser = new User();
-        mockUser.setFirstName("test_first_name");
-        mockUser.setLastName("test_last_name");
-        mockUser.setNickName("test_nick_name");
-        mockUser.setEmail("testEmail@gmail.com");
-        mockUser.setPhone(1234567890L);
-        mockUser.setAboutYourself("test_about_yourself");
+        User mockUser = new User("test_first_name", "test_last_name", "test_nick_name", "testEmail@gmail.com",
+                1234567890L, "test_about_yourself");
         mockUser.setId(id);
 
         when(userService.getUser(id)).thenReturn(mockUser);
         Gson gson = new Gson();
         String expectedJsonUser = gson.toJson(mockUser);
 
-        mockMvc.perform(get("/" + id.toString()))
+        mockMvc.perform(get(URL_BASE + "/" + id.toString()))
                 .andExpect(status().is(200))
                 .andExpect(content().json(expectedJsonUser));
 
@@ -97,22 +98,24 @@ public class UserManagerControllerTests extends UserManagerBaseAppTest {
 
     @Test
     public void post_user_and_expected_is_ok() throws Exception {
+
         User postUser = new User();
         Gson gson = new Gson();
         String content = gson.toJson(postUser);
-        mockMvc.perform(post("/").content(content).contentType(MediaType.APPLICATION_JSON))
+
+        when(userService.postUser(any(User.class))).thenReturn(new User());
+
+        mockMvc.perform(post(URL_BASE).content(content).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(201));
+
+        verify(userService, times(1)).postUser(any(User.class));
     }
 
     @Test
     public void post_user_and_expected_is_json() throws Exception {
-        User mockUser = new User();
-        mockUser.setFirstName("test_first_name");
-        mockUser.setLastName("test_last_name");
-        mockUser.setNickName("test_nick_name");
-        mockUser.setEmail("testEmail@gmail.com");
-        mockUser.setPhone(1234567890L);
-        mockUser.setAboutYourself("test_about_yourself");
+
+        User mockUser = new User("test_first_name", "test_last_name", "test_nick_name", "testEmail@gmail.com",
+                1234567890L, "test_about_yourself");
         mockUser.setId(12345678L);
 
         Gson gson = new Gson();
@@ -120,24 +123,19 @@ public class UserManagerControllerTests extends UserManagerBaseAppTest {
 
         when(userService.postUser(any(User.class))).thenReturn(mockUser);
 
-        mockMvc.perform(post("/")
+        mockMvc.perform(post(URL_BASE)
                 .content(mockUserJson)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(201))
-                .andDo(print());
+                .andExpect(status().is(201));
+
+        verify(userService, times(1)).postUser(any(User.class));
     }
 
     @Test
     public void post_user_and_expected_is_valid_json() throws Exception {
 
-        User mockUser = new User();
-        mockUser.setFirstName("test_first_name");
-        mockUser.setLastName("test_last_name");
-        mockUser.setNickName("test_nick_name");
-        mockUser.setEmail("testEmail@gmail.com");
-        mockUser.setPhone(1234567890L);
-        mockUser.setAboutYourself("test_about_yourself");
-
+        User mockUser = new User("test_first_name", "test_last_name", "test_nick_name", "testEmail@gmail.com",
+                1234567890L, "test_about_yourself");
         mockUser.setId(12345678L);
         User postedUser = new User();
         Gson gson = new Gson();
@@ -145,38 +143,34 @@ public class UserManagerControllerTests extends UserManagerBaseAppTest {
 
         when(userService.postUser(any(User.class))).thenReturn(mockUser);
 
-        mockMvc.perform(post("/")
+        mockMvc.perform(post(URL_BASE)
                 .content(mockUserJson)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(201))
                 .andExpect(content().json("{\"id\":12345678,\"firstName\":\"test_first_name\",\"lastName\":\"test_last_name\""
                         + ",\"nickName\":\"test_nick_name\",\"email\":\"testEmail@gmail.com\",\"phone\":1234567890"
-                        + ",\"aboutYourself\":\"test_about_yourself\"}"))
-                .andDo(print());
+                        + ",\"aboutYourself\":\"test_about_yourself\"}"));
     }
 
     @Test
     public void put_user_and_expected_is_ok() throws Exception {
 
         Long id = 1234567L;
-        User putUser = new User();
-        putUser.setFirstName("test_first_name");
-        putUser.setLastName("test_last_name");
-        putUser.setNickName("test_nick_name");
-        putUser.setEmail("testEmail@gmail.com");
-        putUser.setPhone(1234567890L);
-        putUser.setAboutYourself("test_about_yourself");
-
+        User putUser = new User("test_first_name", "test_last_name", "test_nick_name", "testEmail@gmail.com",
+                1234567890L, "test_about_yourself");
         putUser.setId(id);
 
         Gson gson = new Gson();
         String putJsonUser = gson.toJson(putUser);
 
-        mockMvc.perform(put("/" + id.toString())
+        when(userService.updateUser(any(User.class))).thenReturn(putUser);
+
+        mockMvc.perform(put(URL_BASE)
                 .content(putJsonUser)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().is(200));
+
+        verify(userService, times(1)).updateUser(putUser);
     }
 
     /*
@@ -209,10 +203,9 @@ public class UserManagerControllerTests extends UserManagerBaseAppTest {
 
         when(userService.updateUser(any(User.class))).thenReturn(updatedUser);
 
-        mockMvc.perform(put("/")
+        mockMvc.perform(put(URL_BASE)
                 .content(putJsonUser)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().is(200));
 
         verify(userService, times(1)).updateUser(any(User.class));
@@ -220,12 +213,12 @@ public class UserManagerControllerTests extends UserManagerBaseAppTest {
 
     @Test
     public void internal_server_exception_message_expected_and_status_501() throws Exception {
+
         Long id = 123L;
         String errMessage = "some unknown internal server error";
         when(userService.getUser(eq(id))).thenThrow(new RuntimeException(errMessage));
 
-        mockMvc.perform(get("/{id}", id.toString()))
-                .andDo(print())
+        mockMvc.perform(get(URL_BASE + "/{id}", id.toString()))
                 .andExpect(content().json("{\"reason\":\"" + errMessage + "\"}"))
                 .andExpect(status().is(500));
         verify(userService, times(1)).getUser(eq(id));
@@ -234,37 +227,18 @@ public class UserManagerControllerTests extends UserManagerBaseAppTest {
     @Test
     public void get_all_users_test_and_expected_is_ok() throws Exception {
 
-        mockMvc.perform(get("/users"))
+        mockMvc.perform(get(URL_BASE + "/getAllUsersList"))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void get_all_users_list_and_expected_valid_users_list() throws Exception {
 
-        List<User> mockedUsersList = new ArrayList<>();
+        when(userService.getAllUsers()).thenReturn(new ArrayList<User>());
 
-        Long id = 1234567L;
-        User mockUser = new User();
-        mockUser.setFirstName("test_first_name");
-        mockUser.setLastName("test_last_name");
-        mockUser.setNickName("test_nick_name");
-        mockUser.setEmail("testEmail@gmail.com");
-        mockUser.setPhone(1234567890L);
-        mockUser.setAboutYourself("test_about_yourself");
-        mockUser.setId(id);
-
-        mockedUsersList.add(mockUser);
-        mockedUsersList.add(mockUser);
-        mockedUsersList.add(mockUser);
-
-        Gson gson = new Gson();
-        String expectedList = gson.toJson(mockedUsersList);
-
-        when(userService.getAllUsers()).thenReturn(mockedUsersList);
-        mockMvc.perform(get("/users"))
+        mockMvc.perform(get(URL_BASE + "/getAllUsersList"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().string(expectedList));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
         verify(userService, times(1)).getAllUsers();
     }
@@ -274,13 +248,108 @@ public class UserManagerControllerTests extends UserManagerBaseAppTest {
 
         String email = "9cb14b499be76bb04fdbef92f29c744b"; // MD5
 
-//        when(userService.getUserByEmail(email)).thenReturn(new User());
+        when(userService.getUserByEmail(email)).thenReturn(new User());
 
         mockMvc.perform(get(URL_BASE + "?email=" + email))
-//                .andExpect(status().isAccepted())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andDo(print());
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
-//        verify(userService, times(1)).getUserByEmail(email);
+        verify(userService, times(1)).getUserByEmail(email);
+    }
+
+    @Test
+    public void add_user_into_group_and_expected_is_ok() throws Exception {
+
+        when(userService.addUserIntoGroup(anyLong(), anyLong())).thenReturn(new User());
+
+        mockMvc.perform(post(URL_BASE + "/group?userID=12&groupID=10"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        verify(userService, times(1)).addUserIntoGroup(anyLong(), anyLong());
+    }
+
+    @Test
+    public void add_user_into_group_with_invalid_ids_and_expected_is_error_message() throws Exception {
+
+        Long userID = 10L;
+        Long groupID = -10L;
+        mockMvc.perform(post(URL_BASE + "/group?userID=" + userID + "&groupID=" + groupID))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        verify(userService, times(0)).addUserIntoGroup(anyLong(), anyLong());
+    }
+
+    @Test
+    public void remove_user_from_group_and_expected_is_ok() throws Exception {
+
+        when(userService.removeUserFromGroup(anyLong(), anyLong())).thenReturn(new User());
+
+        mockMvc.perform(delete(URL_BASE + "/group?userID=12&groupID=10"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        verify(userService, times(1)).removeUserFromGroup(anyLong(), anyLong());
+    }
+
+    @Test
+    public void remove_user_from_group_with_invalid_ids_and_expected_is_error_message() throws Exception {
+
+        Long userID = 10L;
+        Long groupID = -10L;
+        mockMvc.perform(delete(URL_BASE + "/group?userID=" + userID + "&groupID=" + groupID))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        verify(userService, times(0)).removeUserFromGroup(anyLong(), anyLong());
+    }
+
+    @Test
+    public void add_user_into_event_and_expected_is_ok() throws Exception {
+
+        when(userService.addUserIntoEvent(anyLong(), anyLong())).thenReturn(new User());
+
+        mockMvc.perform(post(URL_BASE + "/event?userID=12&eventID=10"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        verify(userService, times(1)).addUserIntoEvent(anyLong(), anyLong());
+    }
+
+    @Test
+    public void add_user_into_event_with_invalid_ids_and_expected_is_error_message() throws Exception {
+
+        Long userID = 10L;
+        Long groupID = -10L;
+        mockMvc.perform(post(URL_BASE + "/event?userID=" + userID + "&eventID=" + groupID))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        verify(userService, times(0)).addUserIntoEvent(anyLong(), anyLong());
+    }
+
+    @Test
+    public void remove_user_from_event_and_expected_is_ok() throws Exception {
+
+        when(userService.removeUserFromEvent(anyLong(), anyLong())).thenReturn(new User());
+
+        mockMvc.perform(delete(URL_BASE + "/event?userID=12&eventID=10"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        verify(userService, times(1)).removeUserFromEvent(anyLong(), anyLong());
+    }
+
+    @Test
+    public void remove_user_from_event_with_invalid_ids_and_expected_is_error_message() throws Exception {
+
+        Long userID = 10L;
+        Long groupID = -10L;
+        mockMvc.perform(delete(URL_BASE + "/event?userID=" + userID + "&eventID=" + groupID))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        verify(userService, times(0)).removeUserFromEvent(anyLong(), anyLong());
     }
 }
