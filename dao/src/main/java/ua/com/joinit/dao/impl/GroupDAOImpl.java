@@ -1,6 +1,7 @@
 package ua.com.joinit.dao.impl;
 
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -36,9 +37,8 @@ public class GroupDAOImpl implements GroupDAO {
     public Group getGroupById(Long id) {
 
         Session session = sessionFactory.openSession();
-        Group dbGroup = (Group) session.load(Group.class, id);
-        dbGroup.getName();
-        dbGroup.getDescription();
+        Group dbGroup = (Group) session.get(Group.class, id);
+        Hibernate.initialize(dbGroup.getEvents());
 
         session.close();
 
@@ -70,6 +70,10 @@ public class GroupDAOImpl implements GroupDAO {
         session.update(group);
         session.flush();
         Group dbGroup = (Group) session.get(Group.class, id);
+        if (dbGroup != null) {
+            dbGroup.getDescription();
+        }
+
         session.close();
 
         return dbGroup;

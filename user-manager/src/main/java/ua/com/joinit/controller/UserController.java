@@ -38,7 +38,7 @@ public class UserController {
     @RequestMapping(value = "/{userID}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<User> getUserById(@PathVariable(value = "userID") Long userID) {
 
-        if (userID <= 0L) throw new RuntimeException("bad request: invalid ID!");
+        if (userID == null || userID <= 0L) throw new RuntimeException("bad request: invalid ID!");
         User dbUser = userService.getUser(userID);
         if (dbUser == null) throw new RuntimeException("bad request: no user with such id!");
         return  new ResponseEntity<>(dbUser, HttpStatus.OK);

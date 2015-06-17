@@ -13,6 +13,7 @@ dependencies {
     // Project dependencies
     compile project(":user-manager")
     compile project(":event-manager")
+    compile project(":group-manager")
     compile project(":entity")
     compile project(":dao")
 

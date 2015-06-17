@@ -2,6 +2,7 @@ package ua.com.joinit.mock;
 
 import ua.com.joinit.dao.GroupDAO;
 import ua.com.joinit.entity.Group;
+import ua.com.joinit.entity.User;
 
 import java.util.List;
 
@@ -35,22 +36,17 @@ public class GroupMockDAOImpl implements GroupDAO {
     }
 
     @Override
-    public Group addUserToGroupById(Long groupID, Long userID) {
-        return null;
-    }
-
-    @Override
-    public Group deleteUserFromGroupById(Long groupID, Long userID) {
-        return null;
-    }
-
-    @Override
     public Group addEvent(Long groupID, Long eventID) {
         return null;
     }
 
     @Override
     public Group removeEvent(Long groupID, Long eventID) {
+        return null;
+    }
+
+    @Override
+    public List<User> getAllUsersInAGroupByGroupID(Long groupID) {
         return null;
     }
 }
